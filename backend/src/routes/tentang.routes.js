@@ -35,6 +35,8 @@ const {
   deleteDataMonografi,
   getSdm,
   updateSdm,
+  getRegulasi,
+  updateRegulasi,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -99,5 +101,9 @@ router.delete("/tentang/data-monografi/:id", deleteDataMonografi);
 router.get("/tentang/sdm", getSdm);
 
 router.put("/tentang/sdm", updateSdm);
+
+router.get("/tentang/regulasi", getRegulasi);
+
+router.put("/tentang/regulasi", updateRegulasi);
 
 module.exports = router;
