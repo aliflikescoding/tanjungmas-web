@@ -577,6 +577,91 @@ const deleteFasilitas = async (req, res) => {
   }
 };
 
+// controller to fetch sarana
+const getSarana = async (req, res) => {
+  try {
+    const response = await prisma.sarana.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching sarana",
+      error: error.message,
+    });
+  }
+};
+
+// controller to post sarana
+const postSarana = async (req, res) => {
+  try {
+    await prisma.sarana.create({
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Sarana added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding sarana",
+      error: error.message,
+    });
+  }
+};
+
+// controller to update sarana
+const updateSarana = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.sarana.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Sarana updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating sarana",
+      error: error.message,
+    });
+  }
+};
+
+// controller to delete sarana
+const deleteSarana = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.sarana.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Sarana deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting sarana",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -599,4 +684,8 @@ module.exports = {
   postFasilitas,
   putFasilitas,
   deleteFasilitas,
+  getSarana,
+  postSarana,
+  updateSarana,
+  deleteSarana,
 };

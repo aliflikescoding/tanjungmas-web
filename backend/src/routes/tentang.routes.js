@@ -25,6 +25,10 @@ const {
   postFasilitas,
   putFasilitas,
   deleteFasilitas,
+  getSarana,
+  postSarana,
+  updateSarana,
+  deleteSarana,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -69,5 +73,13 @@ router.post("/tentang/fasilitas", uploadMultipleImagesMiddleware, postFasilitas)
 router.put("/tentang/fasilitas/:id", uploadMultipleImagesMiddleware, putFasilitas);
 
 router.delete("/tentang/fasilitas/:id", deleteFasilitas);
+
+router.get("/tentang/sarana", getSarana);
+
+router.post("/tentang/sarana", postSarana);
+
+router.put("/tentang/sarana/:id", updateSarana);
+
+router.delete("/tentang/sarana/:id", deleteSarana);
 
 module.exports = router;
