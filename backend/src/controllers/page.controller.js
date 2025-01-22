@@ -7,6 +7,7 @@ const unlinkAsync = util.promisify(fs.unlink);
 
 const logoUploadDir = "./public/page/logo";
 const heroUploadDir = "./public/page/hero";
+const navbarUploadDir = "./public/page/navbar";
 
 // Controller to handle uploading page logo
 const uploadPageLogo = async (req, res) => {
@@ -154,4 +155,28 @@ const getNavbarImages = async (req, res) => {
   }
 }
 
-module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage, getNavbarImages };
+const postNavbarImages = async (req, res) => {
+  try {
+    const { filename } = req.file;
+    const newImagePath = `${navbarUploadDir}/${filename}`;
+
+    const newImage = await prisma.navbarImages.create({
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(201).json({
+      message: "Navbar image uploaded successfully",
+      data: newImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error fetching navbar images",
+      error: err.message,
+    })
+  }
+}
+
+module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage, getNavbarImages, postNavbarImages };
