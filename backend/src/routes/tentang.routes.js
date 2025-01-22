@@ -15,6 +15,10 @@ const {
   updateMisi,
   uploadStruktur,
   getStruktur,
+  getFasilitasCategory,
+  postFasilitasCategory,
+  updateFasilitasCategory,
+  deleteFasilitasCategory,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -41,5 +45,13 @@ router.delete("/tentang/misi/:id", deleteMisi);
 router.post("/tentang/struktur", uploadStrukturImageMiddleware, uploadStruktur);
 
 router.get("/tentang/struktur", getStruktur);
+
+router.get("/tentang/fasilitas-category", getFasilitasCategory);
+
+router.post("/tentang/fasilitas-category", postFasilitasCategory);
+
+router.put("/tentang/fasilitas-category/:id", updateFasilitasCategory);
+
+router.delete("/tentang/fasilitas-category/:id", deleteFasilitasCategory);
 
 module.exports = router;

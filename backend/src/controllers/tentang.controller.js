@@ -338,6 +338,91 @@ const getStruktur = async (req, res) => {
   }
 };
 
+// Controller to get all fasilitas cateogry
+const getFasilitasCategory = async (req, res) => {
+  try {
+    const response = await prisma.fasilitasCategory.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
+// controller to post fasilitas category
+const postFasilitasCategory = async (req, res) => {
+  try {
+    await prisma.fasilitasCategory.create({
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Fasilitas category added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
+// controller to update fasilitas category
+const updateFasilitasCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.fasilitasCategory.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Fasilitas category updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
+// controlelr to delete fasilitas category
+const deleteFasilitasCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.fasilitasCategory.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Fasilitas category deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -351,4 +436,8 @@ module.exports = {
   updateMisi,
   uploadStruktur,
   getStruktur,
+  getFasilitasCategory,
+  postFasilitasCategory,
+  updateFasilitasCategory,
+  deleteFasilitasCategory,
 };
