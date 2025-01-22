@@ -2,6 +2,7 @@ const express = require("express");
 const uploadBigImageMiddleware = require("../middlewares/uploadBigImageMiddleware");
 const uploadSmallImageMiddleware = require("../middlewares/uploadSmallImageMiddleware");
 const uploadStrukturImageMiddleware = require("../middlewares/uploadStrukturImageMiddleware");
+const uploadMultipleImagesMiddleware = require("../middlewares/uploadMultipleImagesMiddleware");
 const {
   uploadBigImage,
   uploadSmallImage,
@@ -19,6 +20,11 @@ const {
   postFasilitasCategory,
   updateFasilitasCategory,
   deleteFasilitasCategory,
+  getFasilitas,
+  getFasilitasByCategory,
+  postFasilitas,
+  putFasilitas,
+  deleteFasilitas,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -53,5 +59,15 @@ router.post("/tentang/fasilitas-category", postFasilitasCategory);
 router.put("/tentang/fasilitas-category/:id", updateFasilitasCategory);
 
 router.delete("/tentang/fasilitas-category/:id", deleteFasilitasCategory);
+
+router.get("/tentang/fasilitas-category/:id/fasliitas", getFasilitasByCategory);
+
+router.get("/tentang/fasilitas", getFasilitas);
+
+router.post("/tentang/fasilitas", uploadMultipleImagesMiddleware, postFasilitas);
+
+router.put("/tentang/fasilitas/:id", uploadMultipleImagesMiddleware, putFasilitas);
+
+router.delete("/tentang/fasilitas/:id", deleteFasilitas);
 
 module.exports = router;

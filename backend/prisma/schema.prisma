@@ -15,12 +15,12 @@ datasource db {
 
 model Page {
   id             Int           @id @default(autoincrement()) @map("id")
-  logo           String       @map("logo")
+  logo           String        @map("logo")
   navbarImages   NavbarImages? @relation(fields: [navbarImagesId], references: [id])
   navbarImagesId Int?          @map("navbar_images_id")
   footerImages   FooterImages? @relation(fields: [footerImagesId], references: [id])
   footerImagesId Int?          @map("footer_images_id")
-  heroImage      String       @map("hero_image")
+  heroImage      String        @map("hero_image")
   infoImages     InfoImages?   @relation(fields: [infoImagesId], references: [id])
   infoImagesId   Int?          @map("info_images_id")
 
@@ -91,13 +91,13 @@ model FasilitasCategory {
 }
 
 model Fasilitas {
-  id         Int                @id @default(autoincrement()) @map("id")
-  title      String?            @map("title")
-  sinopsis   String?            @map("sinopsis")
-  content    String?            @map("content")
-  category   FasilitasCategory? @relation(fields: [categoryId], references: [id])
-  categoryId Int?               @map("category_id")
-  images     FasilitasImages[]
+  id              Int                @id @default(autoincrement()) @map("id")
+  title           String?            @map("title")
+  sinopsis        String?            @map("sinopsis")
+  content         String?            @map("content")
+  category        FasilitasCategory? @relation(fields: [categoryId], references: [id])
+  categoryId      Int?               @map("category_id")
+  fasilitasImages FasilitasImages[] // Update to a one-to-many relationship
 
   @@map("fasilitas")
 }
@@ -105,8 +105,8 @@ model Fasilitas {
 model FasilitasImages {
   id          Int        @id @default(autoincrement()) @map("id")
   img         String?    @map("img")
-  fasilitas   Fasilitas? @relation(fields: [fasilitasId], references: [id])
-  fasilitasId Int?       @map("fasilitas_id")
+  fasilitasId Int?       @map("fasilitas_id") // Add a foreign key to relate to Fasilitas
+  fasilitas   Fasilitas? @relation(fields: [fasilitasId], references: [id]) // One-to-many relationship
 
   @@map("fasilitas_images")
 }

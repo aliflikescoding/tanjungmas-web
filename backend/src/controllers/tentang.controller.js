@@ -423,6 +423,160 @@ const deleteFasilitasCategory = async (req, res) => {
   }
 };
 
+// controller to get all fasilitas
+const getFasilitas = async (req, res) => {
+  try {
+    const response = await prisma.fasilitas.findMany({
+      include: {
+        fasilitasImages: true, // Include the related images
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+};
+
+
+// controller to get all fasilitas based on category
+const getFasilitasByCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.fasilitas.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+};
+
+// controler to create fasilitas
+const postFasilitas = async (req, res) => {
+  try {
+    const { title, sinopsis, content, categoryId } = req.body;
+
+    // Create the fasilitas entry
+    const fasilitas = await prisma.fasilitas.create({
+      data: {
+        title,
+        sinopsis,
+        content,
+        categoryId: parseInt(categoryId),
+      },
+    });
+
+    // If images are uploaded, link them to the fasilitas
+    if (req.files && req.files.length > 0) {
+      const imageRecords = req.files.map((file) => ({
+        img: `/public/tentang/fasilitasImages/${file.filename}`, // Adjust path if needed
+        fasilitasId: fasilitas.id, // Link to the created fasilitas
+      }));
+
+      // Save images in the fasilitas_images table
+      await prisma.fasilitasImages.createMany({
+        data: imageRecords,
+      });
+    }
+
+    res.status(200).json({
+      message: "Fasilitas and images added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding fasilitas",
+      error: error.message,
+    });
+  }
+};
+
+// controler to update fasilitas
+const putFasilitas = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the Fasilitas ID from the URL params
+    const { title, sinopsis, content, categoryId } = req.body;
+
+    // Build the data object dynamically for partial updates
+    const dataToUpdate = {};
+    if (title) dataToUpdate.title = title;
+    if (sinopsis) dataToUpdate.sinopsis = sinopsis;
+    if (content) dataToUpdate.content = content;
+    if (categoryId) dataToUpdate.categoryId = parseInt(categoryId);
+
+    // Update the Fasilitas record
+    const updatedFasilitas = await prisma.fasilitas.update({
+      where: { id: parseInt(id) },
+      data: dataToUpdate,
+    });
+
+    // Handle image updates if new files are uploaded
+    if (req.files && req.files.length > 0) {
+      // Map new images to the FasilitasImages format
+      const newImages = req.files.map((file) => ({
+        img: `/public/tentang/bigImage/${file.filename}`, // Update path if needed
+        fasilitasId: updatedFasilitas.id, // Link to the updated Fasilitas
+      }));
+
+      // Delete existing images if required (optional)
+      await prisma.fasilitasImages.deleteMany({
+        where: { fasilitasId: updatedFasilitas.id },
+      });
+
+      // Add new images to the database
+      await prisma.fasilitasImages.createMany({
+        data: newImages,
+      });
+    }
+
+    res.status(200).json({
+      message: "Fasilitas updated successfully",
+      data: updatedFasilitas,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating fasilitas",
+      error: error.message,
+    });
+  }
+};
+
+// controler to delete fasilitas
+const deleteFasilitas = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Delete the fasilitas record
+    await prisma.fasilitas.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.status(200).json({
+      message: "Fasilitas deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting fasilitas",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -440,4 +594,9 @@ module.exports = {
   postFasilitasCategory,
   updateFasilitasCategory,
   deleteFasilitasCategory,
+  getFasilitas,
+  getFasilitasByCategory,
+  postFasilitas,
+  putFasilitas,
+  deleteFasilitas,
 };
