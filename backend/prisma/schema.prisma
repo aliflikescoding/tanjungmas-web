@@ -1,0 +1,246 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Page {
+  id             Int           @id @default(autoincrement()) @map("id")
+  logo           String       @map("logo")
+  navbarImages   NavbarImages? @relation(fields: [navbarImagesId], references: [id])
+  navbarImagesId Int?          @map("navbar_images_id")
+  footerImages   FooterImages? @relation(fields: [footerImagesId], references: [id])
+  footerImagesId Int?          @map("footer_images_id")
+  heroImage      String       @map("hero_image")
+  infoImages     InfoImages?   @relation(fields: [infoImagesId], references: [id])
+  infoImagesId   Int?          @map("info_images_id")
+
+  @@map("page")
+}
+
+model NavbarImages {
+  id    Int     @id @default(autoincrement()) @map("id")
+  image String? @map("image")
+  pages Page[]
+
+  @@map("navbar_images")
+}
+
+model FooterImages {
+  id    Int     @id @default(autoincrement()) @map("id")
+  image String? @map("image")
+  pages Page[]
+
+  @@map("footer_images")
+}
+
+model InfoImages {
+  id    Int     @id @default(autoincrement()) @map("id")
+  image String? @map("image")
+  pages Page[]
+
+  @@map("info_images")
+}
+
+model Tentang {
+  id                      Int                @id @default(autoincrement()) @map("id")
+  imgProfilBig            String?            @map("img_profil_big")
+  imgProfilSmall          String?            @map("img_profil_small")
+  visi                    String?            @map("visi")
+  misi                    Misi?              @relation(fields: [misiId], references: [id])
+  misiId                  Int?               @map("misi_id")
+  strukturPemerintahImage String?            @map("struktur_pemerintah_image")
+  fasilitasCategory       FasilitasCategory? @relation(fields: [fasilitasCategoryId], references: [id])
+  fasilitasCategoryId     Int?               @map("fasilitas_category_id")
+  sarana                  Sarana?            @relation(fields: [saranaId], references: [id])
+  saranaId                Int?               @map("sarana_id")
+  prasarana               Prasarana?         @relation(fields: [prasaranaId], references: [id])
+  prasaranaId             Int?               @map("prasarana_id")
+  dataMonografi           DataMonografi?     @relation(fields: [dataMonografiId], references: [id])
+  dataMonografiId         Int?               @map("data_monografi_id")
+  sdm                     String?            @map("sdm")
+  regulasi                String?            @map("regulasi")
+
+  @@map("tentang")
+}
+
+model Misi {
+  id      Int       @id @default(autoincrement()) @map("id")
+  title   String?   @map("title")
+  tentang Tentang[]
+
+  @@map("misi")
+}
+
+model FasilitasCategory {
+  id        Int         @id @default(autoincrement()) @map("id")
+  title     String?     @map("title")
+  fasilitas Fasilitas[]
+  tentang   Tentang[]
+
+  @@map("fasilitas_category")
+}
+
+model Fasilitas {
+  id         Int                @id @default(autoincrement()) @map("id")
+  title      String?            @map("title")
+  sinopsis   String?            @map("sinopsis")
+  content    String?            @map("content")
+  category   FasilitasCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?               @map("category_id")
+  images     FasilitasImages[]
+
+  @@map("fasilitas")
+}
+
+model FasilitasImages {
+  id          Int        @id @default(autoincrement()) @map("id")
+  img         String?    @map("img")
+  fasilitas   Fasilitas? @relation(fields: [fasilitasId], references: [id])
+  fasilitasId Int?       @map("fasilitas_id")
+
+  @@map("fasilitas_images")
+}
+
+model Sarana {
+  id      Int       @id @default(autoincrement()) @map("id")
+  title   String?   @map("title")
+  tentang Tentang[]
+
+  @@map("sarana")
+}
+
+model Prasarana {
+  id      Int       @id @default(autoincrement()) @map("id")
+  title   String?   @map("title")
+  tentang Tentang[]
+
+  @@map("prasarana")
+}
+
+model DataMonografi {
+  id      Int       @id @default(autoincrement()) @map("id")
+  title   String?   @map("title")
+  link    String?   @map("link")
+  tentang Tentang[]
+
+  @@map("data_monografi")
+}
+
+model LayananCategory {
+  id          Int           @id @default(autoincrement()) @map("id")
+  title       String?       @map("title")
+  layananText LayananText[]
+  layananBlog LayananBlog[]
+
+  @@map("layanan_category")
+}
+
+model LayananText {
+  id         Int              @id @default(autoincrement()) @map("id")
+  title      String?          @map("title")
+  content    String?          @map("content")
+  category   LayananCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?             @map("category_id")
+
+  @@map("layanan_text")
+}
+
+model LayananBlog {
+  id             Int              @id @default(autoincrement()) @map("id")
+  title          String?          @map("title")
+  sinopsis       String?          @map("sinopsis")
+  layananContent String?          @map("layanan_content")
+  category       LayananCategory? @relation(fields: [categoryId], references: [id])
+  categoryId     Int?             @map("category_id")
+  images         LayananImage[]
+
+  @@map("layanan_blog")
+}
+
+model LayananImage {
+  id            Int          @id @default(autoincrement()) @map("id")
+  img           String?      @map("img")
+  layananBlog   LayananBlog? @relation(fields: [layananBlogId], references: [id])
+  layananBlogId Int?         @map("layanan_blog_id")
+
+  @@map("layanan_image")
+}
+
+model InfoCategory {
+  id       Int        @id @default(autoincrement()) @map("id")
+  title    String?    @map("title")
+  infoBlog InfoBlog[]
+  infoText InfoText[]
+
+  @@map("info_category")
+}
+
+model InfoBlog {
+  id              Int             @id @default(autoincrement()) @map("id")
+  title           String?         @map("title")
+  sinopsis        String?         @map("sinopsis")
+  infoBlogContent String?         @map("info_blog_content")
+  category        InfoCategory?   @relation(fields: [categoryId], references: [id])
+  categoryId      Int?            @map("category_id")
+  images          InfoBlogImage[]
+
+  @@map("info_blog")
+}
+
+model InfoBlogImage {
+  id         Int       @id @default(autoincrement()) @map("id")
+  img        String?   @map("img")
+  infoBlog   InfoBlog? @relation(fields: [infoBlogId], references: [id])
+  infoBlogId Int?      @map("info_blog_id")
+
+  @@map("info_blog_image")
+}
+
+model InfoText {
+  id         Int           @id @default(autoincrement()) @map("id")
+  title      String?       @map("title")
+  content    String?       @map("content")
+  category   InfoCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?          @map("category_id")
+
+  @@map("info_text")
+}
+
+model BeritaCategory {
+  id     Int      @id @default(autoincrement()) @map("id")
+  title  String?  @map("title")
+  berita Berita[]
+
+  @@map("berita_category")
+}
+
+model Berita {
+  id            Int             @id @default(autoincrement()) @map("id")
+  title         String?         @map("title")
+  sinopsis      String?         @map("sinopsis")
+  beritaContent String?         @map("berita_content")
+  category      BeritaCategory? @relation(fields: [categoryId], references: [id])
+  categoryId    Int?            @map("category_id")
+  images        BeritaImage[]
+
+  @@map("berita")
+}
+
+model BeritaImage {
+  id       Int     @id @default(autoincrement()) @map("id")
+  img      String? @map("img")
+  berita   Berita? @relation(fields: [beritaId], references: [id])
+  beritaId Int?    @map("berita_id")
+
+  @@map("berita_image")
+}
