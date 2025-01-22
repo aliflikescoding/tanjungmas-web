@@ -8,6 +8,7 @@ const unlinkAsync = util.promisify(fs.unlink);
 const logoUploadDir = "./public/page/logo";
 const heroUploadDir = "./public/page/hero";
 const navbarUploadDir = "./public/page/navbar";
+const footerUploadDir = "./public/page/footer";
 
 // Controller to handle uploading page logo
 const uploadPageLogo = async (req, res) => {
@@ -250,6 +251,115 @@ const deleteNavbarImages = async (req, res) => {
   }
 }
 
+// Controller to fetch footer images
+const getFooterImages = async (req, res) => {
+  try {
+    const response = await prisma.footerImages.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching footer images",
+      error: error.message,
+    });
+  }
+}
+
+// Controller to post footer images
+const postFooterImages = async (req, res) => {
+  try {
+    const { filename } = req.file;
+    const newImagePath = `${footerUploadDir}/${filename}`;
+
+    const newImage = await prisma.footerImages.create({
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(201).json({
+      message: "Footer image uploaded successfully",
+      data: newImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error uploading footer images",
+      error: err.message,
+    })
+  }
+}
+
+// Controller to update footer images
+const putFooterImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { filename } = req.file;
+    const newImagePath = `${footerUploadDir}/${filename}`;
+
+    const updatedImage = await prisma.footerImages.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(200).json({
+      message: "Footer image updated successfully",
+      data: updatedImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error updating footer images",
+      error: err.message,
+    });
+  }
+}
+
+// Controller to delete footer images
+const deleteFooterImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const image = await prisma.footerImages.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!image) {
+      return res.status(404).json({
+        message: "Image not found",
+      });
+    }
+
+    if (fs.existsSync(image.image)) {
+      await unlinkAsync(image.image);
+      console.log(`File deleted: ${image.image}`);
+    }
+
+    await prisma.footerImages.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Footer image deleted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error deleting footer images",
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   uploadPageLogo,
   getPageLogo,
@@ -259,4 +369,8 @@ module.exports = {
   postNavbarImages,
   putNavbarImages,
   deleteNavbarImages,
+  getFooterImages,
+  postFooterImages,
+  putFooterImages,
+  deleteFooterImages,
 };
