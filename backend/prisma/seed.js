@@ -9,11 +9,20 @@ async function main() {
   //     heroImage: "",
   //   },
   // });
-  await prisma.navbarImages.create({
+  // await prisma.navbarImages.create({
+  //   data: {
+  //     image: "",
+  //   },
+  // })
+  await prisma.tentang.update({
+    where {
+      id: 1,
+    }
     data: {
-      image: "",
+      imgProfilBig: "",
+      imgProfilSmall: "",
     },
-  })
+  });
 }
 
 main()
