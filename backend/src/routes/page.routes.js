@@ -8,6 +8,7 @@ const {
   uploadHeroImage,
   getNavbarImages,
   postNavbarImages,
+  putNavbarImages,
 } = require("../controllers/page.controller");
 const uploadNavbarImagesMiddleware = require("../middlewares/uploadNavbarImagesMiddleware");
 
@@ -30,5 +31,8 @@ router.get("/page/navbar", getNavbarImages);
 
 // POST: Post navbar images
 router.post("/page/navbar", uploadNavbarImagesMiddleware, postNavbarImages);
+
+// PUT: Update navbar images based on id
+router.put("/page/navbar/:id", uploadNavbarImagesMiddleware, putNavbarImages);
 
 module.exports = router;

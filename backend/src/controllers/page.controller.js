@@ -179,4 +179,40 @@ const postNavbarImages = async (req, res) => {
   }
 }
 
-module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage, getNavbarImages, postNavbarImages };
+const putNavbarImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { filename } = req.file;
+    const newImagePath = `${navbarUploadDir}/${filename}`;
+
+    const updatedImage = await prisma.navbarImages.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(200).json({
+      message: "Navbar image updated successfully",
+      data: updatedImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error updating navbar images",
+      error: err.message,
+    });
+  }
+}
+
+module.exports = {
+  uploadPageLogo,
+  getPageLogo,
+  getHeroImage,
+  uploadHeroImage,
+  getNavbarImages,
+  postNavbarImages,
+  putNavbarImages,
+};
