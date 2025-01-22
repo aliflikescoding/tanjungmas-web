@@ -22,12 +22,21 @@ async function main() {
   //     visi: "",
   //   },
   // });
+  // await prisma.tentang.update({
+  //   where: {
+  //     id: 1,
+  //   },
+  //   data: {
+  //     strukturPemerintahImage: "",
+  //   },
+  // });
   await prisma.tentang.update({
     where: {
       id: 1,
     },
     data: {
-      strukturPemerintahImage: "",
+      sdm: "",
+      regulasi: "",
     },
   });
 }

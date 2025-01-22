@@ -751,6 +751,52 @@ const deleteDataMonografi = async (req, res) => {
   }
 };
 
+// Controller to fetch the current sdm
+const getSdm = async (req, res) => {
+  try {
+    const response = await prisma.tentang.findUnique({
+      where: {
+        id: 1,
+      },
+      select: {
+        sdm: true,
+      },
+    });
+
+    res.status(200).json(response.sdm);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching sdm",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to update sdm
+const updateSdm = async (req, res) => {
+  try {
+    await prisma.tentang.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        sdm: req.body.sdm,
+      },
+    });
+
+    res.status(200).json({
+      message: "SDM updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating sdm",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -781,4 +827,6 @@ module.exports = {
   createDataMonografi,
   updateDataMonografi,
   deleteDataMonografi,
+  getSdm,
+  updateSdm,
 };
