@@ -9,6 +9,7 @@ const {
   getNavbarImages,
   postNavbarImages,
   putNavbarImages,
+  deleteNavbarImages,
 } = require("../controllers/page.controller");
 const uploadNavbarImagesMiddleware = require("../middlewares/uploadNavbarImagesMiddleware");
 
@@ -34,5 +35,8 @@ router.post("/page/navbar", uploadNavbarImagesMiddleware, postNavbarImages);
 
 // PUT: Update navbar images based on id
 router.put("/page/navbar/:id", uploadNavbarImagesMiddleware, putNavbarImages);
+
+// DELETE: Delete navbar images based on id
+router.delete("/page/navbar/:id", deleteNavbarImages);
 
 module.exports = router;

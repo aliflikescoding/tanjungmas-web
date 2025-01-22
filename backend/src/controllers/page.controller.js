@@ -210,6 +210,46 @@ const putNavbarImages = async (req, res) => {
   }
 }
 
+// Controller to delete navbar images
+const deleteNavbarImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const image = await prisma.navbarImages.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!image) {
+      return res.status(404).json({
+        message: "Image not found",
+      });
+    }
+
+    if (fs.existsSync(image.image)) {
+      await unlinkAsync(image.image);
+      console.log(`File deleted: ${image.image}`);
+    }
+
+    await prisma.navbarImages.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Navbar image deleted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error deleting navbar images",
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   uploadPageLogo,
   getPageLogo,
@@ -218,4 +258,5 @@ module.exports = {
   getNavbarImages,
   postNavbarImages,
   putNavbarImages,
+  deleteNavbarImages,
 };
