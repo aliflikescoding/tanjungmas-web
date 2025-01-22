@@ -29,6 +29,10 @@ const {
   postSarana,
   updateSarana,
   deleteSarana,
+  getDataMonografi,
+  createDataMonografi,
+  updateDataMonografi,
+  deleteDataMonografi,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -81,5 +85,13 @@ router.post("/tentang/sarana", postSarana);
 router.put("/tentang/sarana/:id", updateSarana);
 
 router.delete("/tentang/sarana/:id", deleteSarana);
+
+router.get("/tentang/data-monografi", getDataMonografi);
+
+router.post("/tentang/data-monografi", createDataMonografi);
+
+router.put("/tentang/data-monografi/:id", updateDataMonografi);
+
+router.delete("/tentang/data-monografi/:id", deleteDataMonografi);
 
 module.exports = router;

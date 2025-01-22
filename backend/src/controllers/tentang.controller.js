@@ -662,6 +662,95 @@ const deleteSarana = async (req, res) => {
   }
 };
 
+// controller to fetch dataMonografi
+const getDataMonografi = async (req, res) => {
+  try {
+    const response = await prisma.dataMonografi.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching data monografi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to create dataMonografi
+const createDataMonografi = async (req, res) => {
+  try {
+    const { title, link } = req.body;
+
+    await prisma.dataMonografi.create({
+      data: {
+        title,
+        link,
+      },
+    });
+
+    res.status(200).json({
+      message: "Data Monografi created successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error creating data monografi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to update dataMonografi
+const updateDataMonografi = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.dataMonografi.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title: req.body.title,
+        link: req.body.link,
+      },
+    });
+
+    res.status(200).json({
+      message: "Data Monografi updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating data monografi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to delete data monografi
+const deleteDataMonografi = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.dataMonografi.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Data Monografi deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting data monografi",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -688,4 +777,8 @@ module.exports = {
   postSarana,
   updateSarana,
   deleteSarana,
+  getDataMonografi,
+  createDataMonografi,
+  updateDataMonografi,
+  deleteDataMonografi,
 };
