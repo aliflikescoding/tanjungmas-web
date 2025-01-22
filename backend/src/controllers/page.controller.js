@@ -9,6 +9,7 @@ const logoUploadDir = "./public/page/logo";
 const heroUploadDir = "./public/page/hero";
 const navbarUploadDir = "./public/page/navbar";
 const footerUploadDir = "./public/page/footer";
+const infoUploadDir = ".`/public/page/info";
 
 // Controller to handle uploading page logo
 const uploadPageLogo = async (req, res) => {
@@ -360,6 +361,115 @@ const deleteFooterImages = async (req, res) => {
   }
 }
 
+// Controller to fetch info images
+const getInfoImages = async (req, res) => {
+  try {
+    const response = await prisma.infoImages.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching info images",
+      error: error.message,
+    });
+  }
+}
+
+// Controller to post info images
+const postInfoImages = async (req, res) => {
+  try {
+    const { filename } = req.file;
+    const newImagePath = `${infoUploadDir}/${filename}`;
+
+    const newImage = await prisma.infoImages.create({
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(201).json({
+      message: "Info image uploaded successfully",
+      data: newImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error uploading info images",
+      error: err.message,
+    })
+  }
+}
+
+// Controller to update info images
+const putInfoImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { filename } = req.file;
+    const newImagePath = `${infoUploadDir}/${filename}`;
+
+    const updatedImage = await prisma.infoImages.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        image: newImagePath,
+      },
+    });
+
+    res.status(200).json({
+      message: "Info image updated successfully",
+      data: updatedImage,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error updating info images",
+      error: err.message,
+    });
+  }
+}
+
+// Controller to delete info images
+const deleteInfoImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const image = await prisma.infoImages.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!image) {
+      return res.status(404).json({
+        message: "Image not found",
+      });
+    }
+
+    if (fs.existsSync(image.image)) {
+      await unlinkAsync(image.image);
+      console.log(`File deleted: ${image.image}`);
+    }
+
+    await prisma.infoImages.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Info image deleted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error deleting info images",
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   uploadPageLogo,
   getPageLogo,
@@ -373,4 +483,8 @@ module.exports = {
   postFooterImages,
   putFooterImages,
   deleteFooterImages,
+  getInfoImages,
+  postInfoImages,
+  putInfoImages,
+  deleteInfoImages,
 };

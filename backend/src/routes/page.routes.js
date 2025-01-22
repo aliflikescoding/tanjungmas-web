@@ -14,9 +14,14 @@ const {
   postFooterImages,
   putFooterImages,
   deleteFooterImages,
+  getInfoImages,
+  postInfoImages,
+  putInfoImages,
+  deleteInfoImages,
 } = require("../controllers/page.controller");
 const uploadNavbarImagesMiddleware = require("../middlewares/uploadNavbarImagesMiddleware");
 const uploadFooterImagesMiddleware = require("../middlewares/uploadFooterImagesMiddleware");
+const uploadInfoImagesMiddleware = require("../middlewares/uploadInfoImagesMiddleware");
 
 const router = express.Router();
 
@@ -55,5 +60,17 @@ router.put("/page/footer/:id", uploadFooterImagesMiddleware, putFooterImages);
 
 // DELETE: Delete footer images based on id
 router.delete("/page/footer/:id", deleteFooterImages);
+
+// GET: Fetch info images
+router.get("/page/info", getInfoImages);
+
+// POST: Post info images
+router.post("/page/info", uploadInfoImagesMiddleware, postInfoImages);
+
+// PUT: Update info images based on id
+router.put("/page/info/:id", uploadInfoImagesMiddleware, putInfoImages);
+
+// DELETE: Delete info images based on id
+router.delete("/page/info/:id", deleteInfoImages);
 
 module.exports = router;
