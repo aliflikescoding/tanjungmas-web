@@ -14,12 +14,20 @@ async function main() {
   //     image: "",
   //   },
   // })
+  // await prisma.tentang.update({
+  //   where: {
+  //     id: 1,
+  //   },
+  //   data: {
+  //     visi: "",
+  //   },
+  // });
   await prisma.tentang.update({
     where: {
       id: 1,
     },
     data: {
-      visi: "",
+      strukturPemerintahImage: "",
     },
   });
 }

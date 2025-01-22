@@ -7,6 +7,7 @@ const unlinkAsync = util.promisify(fs.unlink);
 
 const bigImageUploadDir = "./public/tentang/bigImage";
 const smallImageloadDir = "./public/tentang/smallImage";
+const strukturImageloadDir = "./public/tentang/struktur";
 
 // Controller to handle uploading big image
 const uploadBigImage = async (req, res) => {
@@ -271,6 +272,72 @@ const deleteMisi = async (req, res) => {
   }
 };
 
+// Controller to handle uploading struktur image
+const uploadStruktur = async (req, res) => {
+  try {
+    const result = await prisma.tentang.findUnique({
+      where: {
+        id: 1,
+      },
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Tentang not found" });
+    }
+
+    const oldStrukturImagePath = result.strukturPemerintahImage;
+
+    if (oldStrukturImagePath && fs.existsSync(oldStrukturImagePath)) {
+      await unlinkAsync(strukturImageloadDir);
+      console.log(`Old file deleted: ${oldStrukturImagePath}`);
+    }
+
+    const { filename } = req.file;
+    const newStrukturImagePath = `${strukturImageloadDir}/${filename}`;
+
+    await prisma.tentang.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        strukturPemerintahImage: newStrukturImagePath,
+      },
+    });
+
+    res.status(200).json({
+      message: "Small image updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error uploading file and updating small image",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to fetch the current small image
+const getStruktur = async (req, res) => {
+  try {
+    const response = await prisma.tentang.findUnique({
+      where: {
+        id: 1,
+      },
+      select: {
+        strukturPemerintahImage: true,
+      },
+    });
+
+    res.status(200).json(response.strukturPemerintahImage);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching small image",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -282,4 +349,6 @@ module.exports = {
   postMisi,
   deleteMisi,
   updateMisi,
+  uploadStruktur,
+  getStruktur,
 };

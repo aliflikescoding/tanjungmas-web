@@ -1,6 +1,7 @@
 const express = require("express");
 const uploadBigImageMiddleware = require("../middlewares/uploadBigImageMiddleware");
 const uploadSmallImageMiddleware = require("../middlewares/uploadSmallImageMiddleware");
+const uploadStrukturImageMiddleware = require("../middlewares/uploadStrukturImageMiddleware");
 const {
   uploadBigImage,
   uploadSmallImage,
@@ -12,6 +13,8 @@ const {
   postMisi,
   deleteMisi,
   updateMisi,
+  uploadStruktur,
+  getStruktur,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -34,5 +37,9 @@ router.post("/tentang/misi", postMisi);
 router.put("/tentang/misi/:id", updateMisi);
 
 router.delete("/tentang/misi/:id", deleteMisi);
+
+router.post("/tentang/struktur", uploadStrukturImageMiddleware, uploadStruktur);
+
+router.get("/tentang/struktur", getStruktur);
 
 module.exports = router;
