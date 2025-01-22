@@ -140,4 +140,18 @@ const getHeroImage = async (req, res) => {
   }
 };
 
-module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage };
+const getNavbarImages = async (req, res) => {
+  try {
+    const response = await prisma.navbarImages.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching navbar images",
+      error: error.message,
+    });
+  }
+}
+
+module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage, getNavbarImages };

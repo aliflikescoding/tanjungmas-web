@@ -5,7 +5,8 @@ const {
   uploadPageLogo,
   getPageLogo,
   getHeroImage,
-  uploadHeroImage
+  uploadHeroImage,
+  getNavbarImages
 } = require("../controllers/page.controller");
 
 const router = express.Router();
@@ -21,5 +22,8 @@ router.get("/page/hero", getHeroImage);
 
 // POST: Update hero image
 router.post("/page/hero", uploadHeroImageMiddleware, uploadHeroImage);
+
+// GET: Fetch navbar images
+router.get("/page/navbar", getNavbarImages);
 
 module.exports = router;

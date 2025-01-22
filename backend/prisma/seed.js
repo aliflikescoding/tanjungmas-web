@@ -3,12 +3,17 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.page.create({
+  // await prisma.page.create({
+  //   data: {
+  //     logo: "",
+  //     heroImage: "",
+  //   },
+  // });
+  await prisma.navbarImages.create({
     data: {
-      logo: "",
-      heroImage: "",
+      image: "",
     },
-  });
+  })
 }
 
 main()
