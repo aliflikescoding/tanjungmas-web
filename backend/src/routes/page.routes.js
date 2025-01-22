@@ -1,9 +1,11 @@
 const express = require("express");
 const uploadLogoMiddleware = require("../middlewares/uploadLogoMiddleware");
+const uploadHeroImageMiddleware = require("../middlewares/uploadHeroImageMiddleware");
 const {
   uploadPageLogo,
   getPageLogo,
-  getHeroImage
+  getHeroImage,
+  uploadHeroImage
 } = require("../controllers/page.controller");
 
 const router = express.Router();
@@ -16,5 +18,8 @@ router.post("/page/logo", uploadLogoMiddleware, uploadPageLogo);
 
 // GET: Fetch hero image
 router.get("/page/hero", getHeroImage);
+
+// POST: Update hero image
+router.post("/page/hero", uploadHeroImageMiddleware, uploadHeroImage);
 
 module.exports = router;

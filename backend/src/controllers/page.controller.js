@@ -5,7 +5,8 @@ const util = require("util");
 const prisma = new PrismaClient();
 const unlinkAsync = util.promisify(fs.unlink);
 
-const uploadDir = "./public/page/logo";
+const logoUploadDir = "./public/page/logo";
+const heroUploadDir = "./public/page/hero";
 
 // Controller to handle uploading page logo
 const uploadPageLogo = async (req, res) => {
@@ -28,7 +29,7 @@ const uploadPageLogo = async (req, res) => {
     }
 
     const { filename } = req.file;
-    const newLogoPath = `${uploadDir}/${filename}`;
+    const newLogoPath = `${logoUploadDir}/${filename}`;
 
     await prisma.page.update({
       where: {
@@ -36,6 +37,50 @@ const uploadPageLogo = async (req, res) => {
       },
       data: {
         logo: newLogoPath,
+      },
+    });
+
+    res.status(200).json({
+      message: "Logo updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error uploading file and updating logo",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to handle uploading the hero page image
+const uploadHeroImage = async (req, res) => {
+  try {
+    const result = await prisma.page.findUnique({
+      where: {
+        id: 1,
+      },
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Page not found" });
+    }
+
+    const oldLogoPath = result.heroImage;
+
+    if (oldLogoPath && fs.existsSync(oldLogoPath)) {
+      await unlinkAsync(oldLogoPath);
+      console.log(`Old file deleted: ${oldLogoPath}`);
+    }
+
+    const { filename } = req.file;
+    const newHeroImagePath = `${heroUploadDir}/${filename}`;
+
+    await prisma.page.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        heroImage: newHeroImagePath,
       },
     });
 
@@ -95,4 +140,4 @@ const getHeroImage = async (req, res) => {
   }
 };
 
-module.exports = { uploadPageLogo, getPageLogo, getHeroImage };
+module.exports = { uploadPageLogo, getPageLogo, getHeroImage, uploadHeroImage };
