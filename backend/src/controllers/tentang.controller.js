@@ -186,6 +186,91 @@ const updateVisi = async (req, res) => {
   }
 };
 
+// controller to fetch misi
+const getMisi = async (req, res) => {
+  try {
+    const response = await prisma.misi.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching misi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to post misi
+const postMisi = async (req, res) => {
+  try {
+    await prisma.misi.create({
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Misi added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding misi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to update misi
+const updateMisi = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.misi.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Misi updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating misi",
+      error: error.message,
+    });
+  }
+};
+
+// controller to delete misi
+const deleteMisi = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.misi.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Misi deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting misi",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
@@ -193,4 +278,8 @@ module.exports = {
   getSmallImage,
   getVisi,
   updateVisi,
+  getMisi,
+  postMisi,
+  deleteMisi,
+  updateMisi,
 };
