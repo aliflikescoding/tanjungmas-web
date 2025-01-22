@@ -33,7 +33,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const uploadPageImageMiddleware = (req, res, next) => {
+const uploadLogoMiddleware = (req, res, next) => {
   const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
@@ -70,4 +70,4 @@ const uploadPageImageMiddleware = (req, res, next) => {
   });
 };
 
-module.exports = uploadPageImageMiddleware;
+module.exports = uploadLogoMiddleware;

@@ -1,5 +1,5 @@
 const express = require("express");
-const uploadPageImageMiddleware = require("../middlewares/uploadMiddlware");
+const uploadLogoMiddleware = require("../middlewares/uploadLogoMiddleware");
 const {
   uploadPageLogo,
   getPageLogo,
@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/page/logo", getPageLogo);
 
 // POST: Update page logo
-router.post("/page/logo", uploadPageImageMiddleware, uploadPageLogo);
+router.post("/page/logo", uploadLogoMiddleware, uploadPageLogo);
 
 // GET: Fetch hero image
 router.get("/page/hero", getHeroImage);
