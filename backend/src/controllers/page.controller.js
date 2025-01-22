@@ -141,6 +141,7 @@ const getHeroImage = async (req, res) => {
   }
 };
 
+// Controller to fetch navbar images
 const getNavbarImages = async (req, res) => {
   try {
     const response = await prisma.navbarImages.findMany();
@@ -155,6 +156,7 @@ const getNavbarImages = async (req, res) => {
   }
 }
 
+// Controller to post navbar images
 const postNavbarImages = async (req, res) => {
   try {
     const { filename } = req.file;
@@ -179,6 +181,7 @@ const postNavbarImages = async (req, res) => {
   }
 }
 
+// Controller to update navbar images
 const putNavbarImages = async (req, res) => {
   try {
     const { id } = req.params;
