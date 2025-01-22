@@ -73,4 +73,26 @@ const getPageLogo = async (req, res) => {
   }
 };
 
-module.exports = { uploadPageLogo, getPageLogo };
+// Controller to fetch the hero image
+const getHeroImage = async (req, res) => {
+  try {
+    const response = await prisma.page.findUnique({
+      where: {
+        id: 1,
+      },
+      select: {
+        heroImage: true,
+      },
+    });
+
+    res.status(200).json(response.heroImage);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching logo",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { uploadPageLogo, getPageLogo, getHeroImage };
