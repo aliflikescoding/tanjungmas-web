@@ -140,9 +140,57 @@ const getSmallImage = async (req, res) => {
   }
 };
 
+// Controller to fetch the current visi
+const getVisi = async (req, res) => {
+  try {
+    const response = await prisma.tentang.findUnique({
+      where: {
+        id: 1,
+      },
+      select: {
+        visi: true,
+      },
+    });
+
+    res.status(200).json(response.visi);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching small image",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to update visi
+const updateVisi = async (req, res) => {
+  try {
+    await prisma.tentang.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        visi: req.body.visi,
+      },
+    });
+
+    res.status(200).json({
+      message: "Visi updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating visi",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadBigImage,
   uploadSmallImage,
   getBigImage,
   getSmallImage,
+  getVisi,
+  updateVisi,
 };

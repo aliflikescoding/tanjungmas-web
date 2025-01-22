@@ -15,12 +15,11 @@ async function main() {
   //   },
   // })
   await prisma.tentang.update({
-    where {
+    where: {
       id: 1,
-    }
+    },
     data: {
-      imgProfilBig: "",
-      imgProfilSmall: "",
+      visi: "",
     },
   });
 }

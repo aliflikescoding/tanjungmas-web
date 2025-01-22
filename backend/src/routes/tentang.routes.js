@@ -6,6 +6,8 @@ const {
   uploadSmallImage,
   getBigImage,
   getSmallImage,
+  getVisi,
+  updateVisi,
 } = require("../controllers/tentang.controller");
 const router = express.Router();
 
@@ -16,5 +18,9 @@ router.post("/tentang/big", uploadBigImageMiddleware, uploadBigImage);
 router.get("/tentang/small", getSmallImage);
 
 router.post("/tentang/small", uploadSmallImageMiddleware, uploadSmallImage);
+
+router.get("/tentang/visi", getVisi);
+
+router.put("/tentang/visi", updateVisi);
 
 module.exports = router;
