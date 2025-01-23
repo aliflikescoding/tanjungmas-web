@@ -221,6 +221,163 @@ const deleteLayananText = async (req, res) => {
   }
 };
 
+// controller to get all layananBlog
+const getLayananBlog = async (req, res) => {
+  try {
+    const response = await prisma.layananBlog.findMany({
+      include: {
+        images: true, // Include the related images
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching layananBlog",
+      error: error.message,
+    });
+  }
+};
+
+
+// controller to get all layananBlog based on category
+const getLayananBlogByCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.layananBlog.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      include: {
+        images: true,
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching layananBlog",
+      error: error.message,
+    });
+  }
+};
+
+// controler to create layananBlog
+const postLayananBlog = async (req, res) => {
+  try {
+    const { title, sinopsis, layananContent, categoryId } = req.body;
+
+    // Create the layananBlog entry
+    const layananBlog = await prisma.layananBlog.create({
+      data: {
+        title,
+        sinopsis,
+        layananContent,
+        categoryId: parseInt(categoryId),
+      },
+    });
+
+    // If images are uploaded, link them to the layananBlog
+    if (req.files && req.files.length > 0) {
+      const imageRecords = req.files.map((file) => ({
+        img: `/public/layananBlogImages/${file.filename}`, // Adjust path if needed
+        layananBlogId: layananBlog.id, // Link to the created layananBlog
+      }));
+
+      // Save images in the layananBlog_images table
+      await prisma.layananImage.createMany({
+        data: imageRecords,
+      });
+    }
+
+    res.status(200).json({
+      message: "LayananBlog and images added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding layananBlog",
+      error: error.message,
+    });
+  }
+};
+
+// controler to update layananBlog
+const putLayananBlog = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the LayananBlog ID from the URL params
+    const { title, sinopsis, layananContent, categoryId } = req.body;
+
+    // Build the data object dynamically for partial updates
+    const dataToUpdate = {};
+    if (title) dataToUpdate.title = title;
+    if (sinopsis) dataToUpdate.sinopsis = sinopsis;
+    if (layananContent) dataToUpdate.layananContent = layananContent;
+    if (categoryId) dataToUpdate.categoryId = parseInt(categoryId);
+
+    // Update the LayananBlog record
+    const updatedLayananBlog = await prisma.layananBlog.update({
+      where: { id: parseInt(id) },
+      data: dataToUpdate,
+    });
+
+    // Handle image updates if new files are uploaded
+    if (req.files && req.files.length > 0) {
+      // Map new images to the LayananBlogImages format
+      const newImages = req.files.map((file) => ({
+        img: `/public/layananBlogImages/${file.filename}`, // Update path if needed
+        layananBlogId: updatedLayananBlog.id, // Link to the updated LayananBlog
+      }));
+
+      // Delete existing images if required (optional)
+      await prisma.layananImage.deleteMany({
+        where: { layananBlogId: updatedLayananBlog.id },
+      });
+
+      // Add new images to the database
+      await prisma.layananImage.createMany({
+        data: newImages,
+      });
+    }
+
+    res.status(200).json({
+      message: "LayananBlog updated successfully",
+      data: updatedLayananBlog,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating layananBlog",
+      error: error.message,
+    });
+  }
+};
+
+// controler to delete layananBlog
+const deleteLayananBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Delete the layananBlog record
+    await prisma.layananBlog.delete({
+      where: { id: parseInt(id) },
+    });
+
+    res.status(200).json({
+      message: "LayananBlog deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting layananBlog",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   getLayananCategory,
   postLayananCategory,
@@ -231,4 +388,9 @@ module.exports = {
   postLayananText,
   updateLayananText,
   deleteLayananText,
+  getLayananBlog,
+  getLayananBlogByCategory,
+  postLayananBlog,
+  putLayananBlog,
+  deleteLayananBlog,
 };

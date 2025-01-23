@@ -1,4 +1,5 @@
 const express = require("express");
+const uploadMultipleLayananImagesMiddleware = require("../middlewares/uploadMultipleLayananImagesMiddleware");
 const {
   getLayananCategory,
   postLayananCategory,
@@ -9,6 +10,11 @@ const {
   postLayananText,
   updateLayananText,
   deleteLayananText,
+  getLayananBlog,
+  getLayananBlogByCategory,
+  postLayananBlog,
+  putLayananBlog,
+  deleteLayananBlog,
 } = require("../controllers/layanan.controller");
 
 const router = express.Router();
@@ -30,5 +36,15 @@ router.post("/layanan/text", postLayananText);
 router.put("/layanan/text/:id", updateLayananText);
 
 router.delete("/layanan/text/:id", deleteLayananText);
+
+router.get("/layanan/blog", getLayananBlog);
+
+router.get("/layanan/category/:id/blog", getLayananBlogByCategory);
+
+router.post("/layanan/blog", uploadMultipleLayananImagesMiddleware, postLayananBlog);
+
+router.put("/layanan/blog/:id", uploadMultipleLayananImagesMiddleware, putLayananBlog);
+
+router.delete("/layanan/blog/:id", deleteLayananBlog);
 
 module.exports = router;

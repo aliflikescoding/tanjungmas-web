@@ -162,7 +162,7 @@ model LayananBlog {
   layananContent String?          @map("layanan_content")
   category       LayananCategory? @relation(fields: [categoryId], references: [id])
   categoryId     Int?             @map("category_id")
-  images         LayananImage[]
+  images         LayananImage[] // One-to-many relationship with LayananImage
 
   @@map("layanan_blog")
 }
@@ -170,8 +170,8 @@ model LayananBlog {
 model LayananImage {
   id            Int          @id @default(autoincrement()) @map("id")
   img           String?      @map("img")
-  layananBlog   LayananBlog? @relation(fields: [layananBlogId], references: [id])
-  layananBlogId Int?         @map("layanan_blog_id")
+  layananBlogId Int?         @map("layanan_blog_id") // Foreign key to LayananBlog
+  layananBlog   LayananBlog? @relation(fields: [layananBlogId], references: [id]) // One-to-many relationship
 
   @@map("layanan_image")
 }
@@ -192,7 +192,7 @@ model InfoBlog {
   infoBlogContent String?         @map("info_blog_content")
   category        InfoCategory?   @relation(fields: [categoryId], references: [id])
   categoryId      Int?            @map("category_id")
-  images          InfoBlogImage[]
+  images          InfoBlogImage[] // One-to-many relationship with InfoBlogImage
 
   @@map("info_blog")
 }
@@ -200,8 +200,8 @@ model InfoBlog {
 model InfoBlogImage {
   id         Int       @id @default(autoincrement()) @map("id")
   img        String?   @map("img")
-  infoBlog   InfoBlog? @relation(fields: [infoBlogId], references: [id])
-  infoBlogId Int?      @map("info_blog_id")
+  infoBlogId Int?      @map("info_blog_id") // Foreign key to InfoBlog
+  infoBlog   InfoBlog? @relation(fields: [infoBlogId], references: [id]) // One-to-many relationship
 
   @@map("info_blog_image")
 }
@@ -231,7 +231,7 @@ model Berita {
   beritaContent String?         @map("berita_content")
   category      BeritaCategory? @relation(fields: [categoryId], references: [id])
   categoryId    Int?            @map("category_id")
-  images        BeritaImage[]
+  images        BeritaImage[] // One-to-many relationship with BeritaImage
 
   @@map("berita")
 }
@@ -239,8 +239,8 @@ model Berita {
 model BeritaImage {
   id       Int     @id @default(autoincrement()) @map("id")
   img      String? @map("img")
-  berita   Berita? @relation(fields: [beritaId], references: [id])
-  beritaId Int?    @map("berita_id")
+  beritaId Int?    @map("berita_id") // Foreign key to Berita
+  berita   Berita? @relation(fields: [beritaId], references: [id]) // One-to-many relationship
 
   @@map("berita_image")
 }
