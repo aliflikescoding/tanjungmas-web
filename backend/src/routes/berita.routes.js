@@ -11,18 +11,19 @@ const {
   deleteBerita,
 } = require("../controllers/berita.controller");
 const uploadMultipleBeritaImagesMiddleware = require("../middlewares/uploadMultipleBeritaImagesMiddleware");
+const verifyJWT = require("../middlewares/verifyJWT");
 
 const router = express.Router();
 
 router.get("/berita/category", getBeritaCategory);
-router.post("/berita/category", postBeritaCategory);
-router.put("/berita/category/:id", updateBeritaCategory);
-router.delete("/berita/category/:id", deleteBeritaCategory);
+router.post("/berita/category", verifyJWT, postBeritaCategory);
+router.put("/berita/category/:id", verifyJWT, updateBeritaCategory);
+router.delete("/berita/category/:id", verifyJWT, deleteBeritaCategory);
 
 router.get("/berita", getBerita);
-router.get("/category/:categoryId/berita", getBeritaByCategory);
-router.post("/berita", uploadMultipleBeritaImagesMiddleware, postBerita);
-router.put("/berita/:id", uploadMultipleBeritaImagesMiddleware, putBerita);
-router.delete("/berita/:id", deleteBerita);
+router.get("/category/:categoryId/berita", verifyJWT, getBeritaByCategory);
+router.post("/berita", verifyJWT, uploadMultipleBeritaImagesMiddleware, postBerita);
+router.put("/berita/:id", verifyJWT, uploadMultipleBeritaImagesMiddleware, putBerita);
+router.delete("/berita/:id", verifyJWT, deleteBerita);
 
 module.exports = router;
