@@ -527,7 +527,7 @@ const putFasilitas = async (req, res) => {
     if (req.files && req.files.length > 0) {
       // Map new images to the FasilitasImages format
       const newImages = req.files.map((file) => ({
-        img: `/public/tentang/bigImage/${file.filename}`, // Update path if needed
+        img: `/public/tentang/fasilitasImages/${file.filename}`, // Update path if needed
         fasilitasId: updatedFasilitas.id, // Link to the updated Fasilitas
       }));
 
