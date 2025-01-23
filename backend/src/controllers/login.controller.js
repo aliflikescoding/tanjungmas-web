@@ -30,4 +30,9 @@ const adminLogin = async (req, res) => {
   res.json({ message: `Logged in successfully, token ${token}` });
 }
 
-module.exports = { adminLogin };
+const adminLogout = (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "Logged out successfully" });
+}
+
+module.exports = { adminLogin, adminLogout };
