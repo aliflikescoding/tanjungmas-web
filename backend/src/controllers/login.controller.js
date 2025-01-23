@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const prisma = new PrismaClient();
 
@@ -26,7 +27,7 @@ const adminLogin = async (req, res) => {
   });
 
   res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-  res.json({ message: "Logged in successfully!" });
+  res.json({ message: `Logged in successfully, token ${token}` });
 }
 
 module.exports = { adminLogin };
