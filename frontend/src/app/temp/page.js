@@ -1,7 +1,8 @@
 import React from "react";
+import LoadingPage from "@/components/pages/LoadingPage";
 
 const Temp = () => {
-  return <div>Temp</div>;
+  return <LoadingPage />;
 };
 
 export default Temp;

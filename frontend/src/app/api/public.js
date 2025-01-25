@@ -34,3 +34,12 @@ export const auth = async () => {
     }
   }
 };
+
+export const logout = async () => {
+  try {
+    const response = await api.post("/logout");
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

@@ -1,29 +1,28 @@
 "use client";
 
-import {  message } from "antd";
+import { message } from "antd";
 import { useEffect, useState } from "react";
 import { auth } from "@/app/api/public.js"; // Adjust the import path as necessary
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import LoadingPage from "../pages/LoadingPage";
+import AdminSidebar from "../common/AdminSidebar";
 
 const AdminLayout = ({ children }) => {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-
-  const loginWarning = () => {
-    messageApi.open({
-      type: "error",
-      content: "Please log in to go to admin panel",
-    });
-  };
-
+  
   useEffect(() => {
     const checkAuth = async () => {
       const authenticated = await auth();
       if (!authenticated) {
-        loginWarning();
-        router.push("/login");
+        messageApi.open({
+          type: "error",
+          content: "Please log in to go to admin panel",
+        });
+        setTimeout(() => {
+          router.push("/login");
+        }, 1000);
       } else {
         setIsAuthenticated(true);
       }
@@ -33,17 +32,20 @@ const AdminLayout = ({ children }) => {
   }, [router]);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        {contextHolder}
+        <LoadingPage />
+      </>
+    );
   }
 
   return (
     <>
       {contextHolder}
-      <div className="flex">
-        <div>
-          <h1>Admin Panel</h1>
-        </div>
-        {children}
+      <div className="flex h-[100vh]">
+        <AdminSidebar />
+        <div className="bg-slate-100 w-full">{children}</div>
       </div>
     </>
   );
