@@ -1,37 +1,12 @@
-"use client";
+import AdminLayout from "@/components/layouts/AdminLayout";
 
-import { useEffect, useState } from 'react';
-import { auth } from '@/app/api/public.js'; // Adjust the import path as necessary
-import { useRouter } from 'next/navigation';
+export const metadata = {
+  title: "Admin Panel",
+  description: "Tanjungmas web admin panel",
+};
 
-export default function AdminLayout({ children }) {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+const layout = ({ children }) => {
+  return <AdminLayout>{children}</AdminLayout>;
+};
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authenticated = await auth();
-      if (!authenticated) {
-        router.push('/login');
-      } else {
-        setIsAuthenticated(true);
-      }
-    };
-
-    checkAuth();
-  }, [router]);
-
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="admin-layout">
-      <header>
-        <h1>Admin Panel</h1>
-        {/* Add a navigation bar or admin-specific links */}
-      </header>
-      <main>{children}</main>
-    </div>
-  );
-}
+export default layout;
