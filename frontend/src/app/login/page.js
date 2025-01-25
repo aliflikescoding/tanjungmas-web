@@ -1,9 +1,9 @@
 "use client";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { login } from "@/app/api/private";
+import { login } from "@/app/api/public";
 
 const Login = () => {
   const router = useRouter();
@@ -16,8 +16,7 @@ const Login = () => {
       const response = await login(values.username, values.password);
 
       setTimeout(() => {
-        console.log(response);
-        router.push("/admin/dashboard");
+        router.push("/admin");
         setLoading(false);
       }, 1000);
     } catch (err) {

@@ -1,8 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const prisma = new PrismaClient();
+
+const jwt = "";
 
 const adminLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -26,13 +28,24 @@ const adminLogin = async (req, res) => {
     expiresIn: "1h",
   });
 
-  res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-  res.json({ message: `Logged in successfully, token ${token}` });
-}
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: 3600000, // 1 hour
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    secure: process.env.NODE_ENV === "production", // Secure cookies only in production
+    domain: "localhost", // Explicitly set the domain
+  });
+
+  return res.json({ message: `Logged in successfully` });
+};
 
 const adminLogout = (req, res) => {
   res.clearCookie("token");
   res.json({ message: "Logged out successfully" });
+};
+
+const auth = () => {
+  
 }
 
 module.exports = { adminLogin, adminLogout };

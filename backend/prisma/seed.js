@@ -30,15 +30,20 @@ async function main() {
   //     strukturPemerintahImage: "",
   //   },
   // });
-  await prisma.tentang.update({
-    where: {
-      id: 1,
-    },
+  // await prisma.tentang.update({
+  //   where: {
+  //     id: 1,
+  //   },
+  //   data: {
+  //     sdm: "",
+  //     regulasi: "",
+  //   },
+  // });
+  await prisma.token.create({
     data: {
-      sdm: "",
-      regulasi: "",
-    },
-  });
+      token: "",
+    }
+  })
 }
 
 main()
