@@ -1,6 +1,7 @@
 import { Roboto } from "next/font/google";
 import "./global.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import "@ant-design/v5-patch-for-react-19";
 
 const roboto = Roboto({
   variable: "--font-roboto",
