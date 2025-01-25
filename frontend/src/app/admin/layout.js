@@ -2,21 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import { auth } from '@/app/api/public.js'; // Adjust the import path as necessary
+import { useRouter } from 'next/navigation';
 
 export default function AdminLayout({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
       const authenticated = await auth();
-      setIsAuthenticated(authenticated);
+      if (!authenticated) {
+        router.push('/login');
+      } else {
+        setIsAuthenticated(true);
+      }
     };
 
     checkAuth();
-  }, []);
+  }, [router]);
 
-  if (!isAuthenticated) {
-    return <div>Loading...</div>; // Or redirect to a login page
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
   }
 
   return (

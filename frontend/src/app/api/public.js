@@ -15,15 +15,22 @@ export const login = async (username, password) => {
     const response = await api.post("/login", { username, password });
     return response; // No need to set the cookie in the front-end
   } catch (err) {
-    throw new Error(err.response.data.message);
+    throw new Error(err);
   }
 };
 
 export const auth = async () => {
   try {
     const response = await api.post("/auth");
-    return response.status === 200;
+    if (response.status === 200) {
+      return true;
+    }
   } catch (err) {
-    return false;
+    if (err.response && err.response.status === 401) {
+      return false;
+    } else {
+      console.error(err);
+      return false;
+    }
   }
 };
