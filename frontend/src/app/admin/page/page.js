@@ -1,7 +1,11 @@
-import React from "react";
+import LogoImage from "@/components/admin/page/LogoImage";
 
 const AdminPage = () => {
-  return <div>AdminPage</div>;
+  return (
+    <>
+      <LogoImage />
+    </>
+  );
 };
 
 export default AdminPage;

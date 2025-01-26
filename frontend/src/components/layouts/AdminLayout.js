@@ -11,7 +11,7 @@ const AdminLayout = ({ children }) => {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  
+
   useEffect(() => {
     const checkAuth = async () => {
       const authenticated = await auth();
@@ -45,7 +45,7 @@ const AdminLayout = ({ children }) => {
       {contextHolder}
       <div className="flex h-[100vh]">
         <AdminSidebar />
-        <div className="bg-slate-100 w-full">{children}</div>
+        <div className="bg-slate-100 p-5 w-full">{children}</div>
       </div>
     </>
   );

@@ -42,4 +42,17 @@ export const logout = async () => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
+
+export const getLogo = async () => {
+  try {
+    const response = await api.get("/page/logo");
+    const logoPath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return logoPath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
