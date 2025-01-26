@@ -71,3 +71,58 @@ export const deleteNavbarImage = async (id) => {
     throw err;
   }
 }
+
+// info images
+export const createInfoImage = async (file) => {
+  const formData = new FormData();
+  formData.append("infoImage", file);
+
+  try {
+    const response = await api.post("/page/info", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};
+
+export const deleteInfoImage = async (id) => {
+  try {
+    const response = await api.delete(`/page/info/${id}`);
+    return response;
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};
+
+export const createFooterImage = async (file) => {
+  const formData = new FormData();
+  formData.append("footerImage", file);
+
+  try {
+    const response = await api.post("/page/footer", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};
+
+export const deleteFooterImage = async (id) => {
+  try {
+    const response = await api.delete(`/page/footer/${id}`);
+    return response;
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};

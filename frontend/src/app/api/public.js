@@ -73,12 +73,38 @@ export const getHeroImage = async () => {
 export const getNavbarImages = async () => {
   try {
     const response = await api.get("/page/navbar");
-    const navbarImages = response.data.map(item => ({
+    const navbarImages = response.data.map((item) => ({
       ...item,
-      image: item.image.replace(/^\.\/public/, "http://localhost:5000")
+      image: item.image.replace(/^\.\/public/, "http://localhost:5000"),
     }));
     return navbarImages;
   } catch (err) {
     throw new Error(err);
   }
-}
+};
+
+export const getInfoImages = async () => {
+  try {
+    const response = await api.get("/page/info");
+    const infoimages = response.data.map((item) => ({
+      ...item,
+      image: item.image.replace(/^.*\.\/public/, "http://localhost:5000"),
+    }));
+    return infoimages;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFooterImages = async () => {
+  try {
+    const response = await api.get("/page/footer");
+    const infoimages = response.data.map((item) => ({
+      ...item,
+      image: item.image.replace(/^.*\.\/public/, "http://localhost:5000"),
+    }));
+    return infoimages;
+  } catch (err) {
+    throw new Error(err);
+  }
+};

@@ -1,6 +1,8 @@
 import LogoImage from "@/components/admin/page/LogoImage";
 import HeroImage from "@/components/admin/page/HeroImage";
 import NavbarImages from "@/components/admin/page/NavbarImages";
+import InfoImages from "@/components/admin/page/InfoImages";
+import FooterImages from "@/components/admin/page/FooterImages";
 
 const AdminPage = () => {
   return (
@@ -9,6 +11,8 @@ const AdminPage = () => {
       <LogoImage />
       <NavbarImages />
       <HeroImage />
+      <InfoImages />
+      <FooterImages />
     </>
   );
 };
