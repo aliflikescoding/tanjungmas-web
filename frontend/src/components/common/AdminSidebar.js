@@ -55,7 +55,7 @@ const AdminSidebar = () => {
   return (
     <>
       {contextHolder}
-      <div className="h-full px-5 border-r-2 py-5 min-w-fit flex flex-col items-center justify-between">
+      <div className="min-h-[100vh] px-5 border-r-2 py-5 min-w-fit flex flex-col items-center justify-between">
         <div className="flex flex-col items-center">
           <div className="flex items-center gap-2 mr-10 mb-12">
             <Image

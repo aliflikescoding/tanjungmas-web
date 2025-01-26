@@ -43,7 +43,7 @@ const AdminLayout = ({ children }) => {
   return (
     <>
       {contextHolder}
-      <div className="flex h-[100vh]">
+      <div className="flex min-h-[100vh]">
         <AdminSidebar />
         <div className="bg-slate-100 p-5 w-full">{children}</div>
       </div>

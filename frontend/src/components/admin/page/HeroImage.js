@@ -4,27 +4,27 @@ import { useEffect, useState } from "react";
 import { Button, Modal, message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { getLogo } from "@/app/api/public";
-import { updateLogo } from "@/app/api/private"; // Assuming updateLogo is correctly imported
+import { getHeroImage } from "@/app/api/public";
+import { updateHeroImage } from "@/app/api/private"; // Assuming updateHeroImage is correctly imported
 
 const { Dragger } = Upload;
 
-const LogoImage = () => {
-  const [logoUrl, setLogoUrl] = useState("");
+const HeroImage = () => {
+  const [HeroImageUrl, setHeroImageUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileToUpload, setFileToUpload] = useState(null);
 
   useEffect(() => {
-    const fetchLogo = async () => {
+    const fetchHeroImage = async () => {
       try {
-        const response = await getLogo();
-        setLogoUrl(response); // Assuming the response contains the logo URL
+        const response = await getHeroImage();
+        setHeroImageUrl(response);
       } catch (err) {
-        console.error("Failed to fetch logo:", err);
+        console.error("Failed to fetch hero image:", err);
       }
     };
 
-    fetchLogo();
+    fetchHeroImage();
   }, []);
 
   const showModal = () => {
@@ -33,19 +33,22 @@ const LogoImage = () => {
 
   const handleOk = async () => {
     if (fileToUpload) {
-      const hideLoadingMessage = message.loading({ content: "Uploading logo...", duration: 0 }); // Show loading message
+      const hideLoadingMessage = message.loading({
+        content: "Uploading hero image...",
+        duration: 0,
+      }); // Show loading message
       try {
-        await updateLogo(fileToUpload); // Upload the file using the API function
+        await updateHeroImage(fileToUpload); // Upload the file using the API function
         hideLoadingMessage(); // Hide loading message
-        message.success("Logo updated successfully!");
+        message.success("Hero image updated successfully!");
         setFileToUpload(null); // Clear selected file
         setIsModalOpen(false); // Close the modal
-        // Refresh the logo after successful upload
-        const refreshedLogo = await getLogo();
-        setLogoUrl(refreshedLogo);
+        // Refresh the hero image after successful upload
+        const refreshedHeroImage = await getHeroImage();
+        setHeroImageUrl(refreshedHeroImage);
       } catch (err) {
         hideLoadingMessage(); // Hide loading message
-        message.error("Failed to update logo.");
+        message.error("Failed to update hero image.");
       }
     } else {
       message.error("No file selected!");
@@ -58,7 +61,7 @@ const LogoImage = () => {
   };
 
   const uploadProps = {
-    name: "logo",
+    name: "heroImage",
     multiple: false,
     beforeUpload(file) {
       if (fileToUpload) {
@@ -76,12 +79,12 @@ const LogoImage = () => {
   return (
     <>
       <div className="mt-4">
-        <h1 className="text-2xl">Page Logo</h1>
+        <h1 className="text-2xl">Hero Image</h1>
         <div className="p-4 mt-2 bg-white w-fit rounded-md shadow-md flex items-center gap-4">
-          {logoUrl ? (
+          {HeroImageUrl ? (
             <Image
-              src={logoUrl}
-              alt="semarang logo"
+              src={HeroImageUrl}
+              alt="Hero Image"
               width="0"
               height="0"
               sizes="100vw"
@@ -91,10 +94,10 @@ const LogoImage = () => {
             <p>Loading...</p>
           )}
           <Button type="primary" onClick={showModal} className="mt-4">
-            Update Logo
+            Update Hero Image
           </Button>
           <Modal
-            title="Update Logo"
+            title="Update Hero Image"
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -117,4 +120,4 @@ const LogoImage = () => {
   );
 };
 
-export default LogoImage;
+export default HeroImage;

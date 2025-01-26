@@ -56,3 +56,29 @@ export const getLogo = async () => {
     throw new Error(err);
   }
 };
+
+export const getHeroImage = async () => {
+  try {
+    const response = await api.get("/page/hero");
+    const heroImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return heroImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getNavbarImages = async () => {
+  try {
+    const response = await api.get("/page/navbar");
+    const navbarImages = response.data.map(item => ({
+      ...item,
+      image: item.image.replace(/^\.\/public/, "http://localhost:5000")
+    }));
+    return navbarImages;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
