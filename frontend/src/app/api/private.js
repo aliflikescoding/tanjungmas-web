@@ -160,3 +160,51 @@ export const updateSmallImage = async (file) => {
     throw err;
   }
 };
+
+// visi
+export const updateVisi = async (visi) => {
+  try {
+    const response = await api.put("/tentang/visi", { visi });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to update visi:", err);
+    throw err;
+  }
+}
+
+// misi
+export const createMisi = async (title) => {
+  try {
+    const response = await api.post("/tentang/misi", { title }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+export const deleteMisi = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/misi/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export const updateStruktur = async (file) => {
+  const formData = new FormData();
+  formData.append("strukturImage", file);
+
+  try {
+    const response = await api.post("/tentang/struktur", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};

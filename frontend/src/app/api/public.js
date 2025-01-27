@@ -134,3 +134,34 @@ export const getSmallImage = async () => {
     throw new Error(err);
   }
 };
+
+export const getVisi = async () => {
+  try {
+    const response = await api.get("/tentang/visi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export const getMisi = async () => {
+  try {
+    const response = await api.get("/tentang/misi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export const getStruktur = async () => {
+  try {
+    const response = await api.get("/tentang/struktur");
+    const strukturPath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return strukturPath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
