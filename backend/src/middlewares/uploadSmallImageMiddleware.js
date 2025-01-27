@@ -3,7 +3,7 @@ const fs = require("fs");
 const multer = require("multer");
 
 // Ensure upload directory exists
-const uploadDir = "./public/tentang/smallimage";
+const uploadDir = "./public/tentang/smallImage";
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });

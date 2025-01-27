@@ -4,8 +4,6 @@ const bcrypt = require("bcrypt");
 
 const prisma = new PrismaClient();
 
-const jwt = "";
-
 const adminLogin = async (req, res) => {
   const { username, password } = req.body;
   const combinedPassword = password + process.env.PASSWORD_SALT;
