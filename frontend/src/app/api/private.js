@@ -70,7 +70,7 @@ export const deleteNavbarImage = async (id) => {
     console.error("Failed to upload logo:", err);
     throw err;
   }
-}
+};
 
 // info images
 export const createInfoImage = async (file) => {
@@ -142,12 +142,12 @@ export const updateBigImage = async (file) => {
     console.error("Failed to upload logo:", err);
     throw err;
   }
-}
+};
 
 export const updateSmallImage = async (file) => {
   const formData = new FormData();
   formData.append("smallImage", file);
-  
+
   try {
     const response = await api.post("/tentang/small", formData, {
       headers: {
@@ -170,7 +170,7 @@ export const updateVisi = async (visi) => {
     console.error("Failed to update visi:", err);
     throw err;
   }
-}
+};
 
 // misi
 export const createMisi = async (title) => {
@@ -190,7 +190,7 @@ export const deleteMisi = async (id) => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 // struktur
 export const updateStruktur = async (file) => {
@@ -232,7 +232,9 @@ export const deleteFasilitasCategory = async (id) => {
 
 export const updateFasilitasCategory = async (title, id) => {
   try {
-    const response = await api.put(`/tentang/fasilitas-category/${id}`, { title }); // Use 'title' instead of 'misi'
+    const response = await api.put(`/tentang/fasilitas-category/${id}`, {
+      title,
+    }); // Use 'title' instead of 'misi'
     return response.data; // Adjust based on backend response format
   } catch (err) {
     console.error("Failed to create misi:", err); // Updated error message for clarity
@@ -243,7 +245,7 @@ export const updateFasilitasCategory = async (title, id) => {
 // create fasilitas (blog)
 export const createFasilitas = async (formData) => {
   try {
-    const response = await api.post("/tentang/fasilitas", formData, {
+    const response = await api.post(`/tentang/fasilitas`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -252,4 +254,21 @@ export const createFasilitas = async (formData) => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
+
+export const updateFasilitas = async (id, formData) => {
+  try {
+    const response = await api.put(`/tentang/fasilitas/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    console.error(
+      "Error updating fasilitas:",
+      err.response?.data || err.message
+    );
+    throw err; // Don't wrap in new Error() as it loses the original error details
+  }
+};
