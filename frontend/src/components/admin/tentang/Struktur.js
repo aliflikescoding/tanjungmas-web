@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, Modal, message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { getStruktur } from "@/app/api/public";
+import { getStruktur } from "@/app/api/public"; // Import from the correct file
 import { updateStruktur } from "@/app/api/private";
 
 const { Dragger } = Upload;
@@ -36,18 +36,17 @@ const Struktur = () => {
       const hideLoadingMessage = message.loading({
         content: "Uploading struktur image...",
         duration: 0,
-      }); // Show loading message
+      });
       try {
-        await updateStruktur(fileToUpload); // Upload the file using the API function
-        hideLoadingMessage(); // Hide loading message
+        await updateStruktur(fileToUpload);
+        hideLoadingMessage();
         message.success("Struktur image updated successfully!");
-        setFileToUpload(null); // Clear selected file
-        setIsModalOpen(false); // Close the modal
-        // Refresh the struktur image after successful upload
+        setFileToUpload(null);
+        setIsModalOpen(false);
         const refreshedStrukturImage = await getStruktur();
         setStrukturImageUrl(refreshedStrukturImage);
       } catch (err) {
-        hideLoadingMessage(); // Hide loading message
+        hideLoadingMessage();
         message.error("Failed to update struktur image.");
       }
     } else {
@@ -57,7 +56,7 @@ const Struktur = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setFileToUpload(null); // Clear selected file on cancel
+    setFileToUpload(null);
   };
 
   const uploadProps = {
@@ -66,10 +65,10 @@ const Struktur = () => {
     beforeUpload(file) {
       if (fileToUpload) {
         message.error("You can only upload one file at a time.");
-        return false; // Prevent further file selection if a file is already chosen
+        return false;
       }
-      setFileToUpload(file); // Store the first file selected
-      return false; // Prevent automatic upload
+      setFileToUpload(file);
+      return false;
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);

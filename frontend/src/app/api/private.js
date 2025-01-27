@@ -204,7 +204,7 @@ export const updateStruktur = async (file) => {
     });
     return response.data; // Adjust based on backend response format
   } catch (err) {
-    console.error("Failed to upload struktur:", err);
+    console.error("Failed to upload logo:", err);
     throw err;
   }
 };
