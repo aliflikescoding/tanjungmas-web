@@ -34,3 +34,103 @@ export const auth = async () => {
     }
   }
 };
+
+export const logout = async () => {
+  try {
+    const response = await api.post("/logout");
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getLogo = async () => {
+  try {
+    const response = await api.get("/page/logo");
+    const logoPath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return logoPath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getHeroImage = async () => {
+  try {
+    const response = await api.get("/page/hero");
+    const heroImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return heroImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getNavbarImages = async () => {
+  try {
+    const response = await api.get("/page/navbar");
+    const navbarImages = response.data.map((item) => ({
+      ...item,
+      image: item.image.replace(/^\.\/public/, "http://localhost:5000"),
+    }));
+    return navbarImages;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getInfoImages = async () => {
+  try {
+    const response = await api.get("/page/info");
+    const infoimages = response.data.map((item) => ({
+      ...item,
+      image: item.image.replace(/^.*\.\/public/, "http://localhost:5000"),
+    }));
+    return infoimages;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFooterImages = async () => {
+  try {
+    const response = await api.get("/page/footer");
+    const infoimages = response.data.map((item) => ({
+      ...item,
+      image: item.image.replace(/^.*\.\/public/, "http://localhost:5000"),
+    }));
+    return infoimages;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getBigImage = async () => {
+  try {
+    const response = await api.get("/tentang/big");
+    const heroImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return heroImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSmallImage = async () => {
+  try {
+    const response = await api.get("/tentang/small");
+    const smallImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return smallImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
