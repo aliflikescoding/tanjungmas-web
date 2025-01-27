@@ -165,3 +165,21 @@ export const getStruktur = async () => {
     throw new Error(err);
   }
 };
+
+export const getFasilitasCategory = async () => {
+  try {
+    const response = await api.get("/tentang/fasilitas-category");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFasilitasCategoryBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/tentang/fasilitas-category/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};

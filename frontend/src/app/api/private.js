@@ -192,6 +192,7 @@ export const deleteMisi = async (id) => {
   }
 }
 
+// struktur
 export const updateStruktur = async (file) => {
   const formData = new FormData();
   formData.append("strukturImage", file);
@@ -208,3 +209,47 @@ export const updateStruktur = async (file) => {
     throw err;
   }
 };
+
+// fasilitas category
+export const createFasilitasCategory = async (title) => {
+  try {
+    const response = await api.post("/tentang/fasilitas-category", { title }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+export const deleteFasilitasCategory = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/fasilitas-category/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateFasilitasCategory = async (title, id) => {
+  try {
+    const response = await api.put(`/tentang/fasilitas-category/${id}`, { title }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+// create fasilitas (blog)
+export const createFasilitas = async (formData) => {
+  try {
+    const response = await api.post("/tentang/fasilitas", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

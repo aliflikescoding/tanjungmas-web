@@ -4,11 +4,14 @@ import { Button, Modal, Form, Input, message, Table } from "antd";
 import { getMisi } from "@/app/api/public";
 import { createMisi, deleteMisi } from "@/app/api/private";
 import { useState, useEffect } from "react";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+
+const { confirm } = Modal;
 
 const Misi = () => {
   const [misi, setMisi] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm(); // Add this line to get the form instance
 
   useEffect(() => {
     const fetchMisi = async () => {
@@ -29,31 +32,48 @@ const Misi = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    form.resetFields(); // Reset the form fields when the modal is closed
   };
 
-  const handleFormSubmit = async (values, form) => {
-  const hideLoadingMessage = message.loading({
-    content: "Adding misi...",
-    duration: 0,
-  });
+  const handleFormSubmit = async (values) => {
+    const hideLoadingMessage = message.loading({
+      content: "Adding misi...",
+      duration: 0,
+    });
 
-  try {
-    await createMisi(values.title);
-    hideLoadingMessage();
-    message.success("Misi added successfully!");
+    try {
+      await createMisi(values.title);
+      hideLoadingMessage();
+      message.success("Misi added successfully!");
 
-    const refreshedMisi = await getMisi();
-    setMisi(refreshedMisi);
+      const refreshedMisi = await getMisi();
+      setMisi(refreshedMisi);
 
-    form.resetFields(); // Reset the input field
-    setIsModalOpen(false);
-  } catch (err) {
-    hideLoadingMessage();
-    message.error("Failed to add misi.");
-    console.error("Error while adding misi:", err);
-  }
-};
+      form.resetFields(); // Reset the form fields after successful submission
+      setIsModalOpen(false);
+    } catch (err) {
+      hideLoadingMessage();
+      message.error("Failed to add misi.");
+      console.error("Error while adding misi:", err);
+    }
+  };
 
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: "Are you sure you want to delete this misi?",
+      icon: <ExclamationCircleOutlined />,
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleDelete(id);
+      },
+      onCancel() {
+        console.log("Deletion cancelled");
+      },
+    });
+  };
 
   const handleDelete = async (id) => {
     const hideLoadingMessage = message.loading({
@@ -90,7 +110,7 @@ const Misi = () => {
       key: "action",
       render: (record) => (
         <Button
-          onClick={() => handleDelete(record.id)}
+          onClick={() => showDeleteConfirm(record.id)}
           type="primary"
           danger
           icon={<DeleteOutlined />}
@@ -120,9 +140,14 @@ const Misi = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <Form name="misiForm" onFinish={handleFormSubmit} autoComplete="off">
+        <Form
+          form={form} // Pass the form instance to the Form component
+          name="misiForm"
+          onFinish={handleFormSubmit}
+          autoComplete="off"
+        >
           <Form.Item
-            label="title"
+            label="Title"
             name="title"
             rules={[{ required: true, message: "Please input your misi!" }]}
           >
@@ -133,7 +158,7 @@ const Misi = () => {
               Cancel
             </Button>
             <Button type="primary" className="ml-2" htmlType="submit">
-              Ok
+              Submit
             </Button>
           </Form.Item>
         </Form>

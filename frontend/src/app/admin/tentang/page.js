@@ -3,6 +3,7 @@ import Misi from "@/components/admin/tentang/Misi";
 import SmallImage from "@/components/admin/tentang/SmallImage";
 import Visi from "@/components/admin/tentang/Visi";
 import Struktur from "@/components/admin/tentang/Struktur";
+import FasilitasCategory from "@/components/admin/tentang/FasilitasCategory";
 
 const AdminTentang = () => {
   return (
@@ -13,6 +14,7 @@ const AdminTentang = () => {
       <Visi />
       <Misi />
       <Struktur />
+      <FasilitasCategory />
     </>
   );
 };
