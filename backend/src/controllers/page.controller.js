@@ -9,7 +9,7 @@ const logoUploadDir = "./public/page/logo";
 const heroUploadDir = "./public/page/hero";
 const navbarUploadDir = "./public/page/navbar";
 const footerUploadDir = "./public/page/footer";
-const infoUploadDir = ".`/public/page/info";
+const infoUploadDir = "./public/page/info";
 
 // Controller to handle uploading page logo
 const uploadPageLogo = async (req, res) => {

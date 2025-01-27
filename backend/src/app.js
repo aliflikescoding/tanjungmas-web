@@ -17,6 +17,9 @@ app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 
+// Serve static files
+app.use(express.static("public")); // This serves files from the "public" folder
+
 // Routes
 app.use(authRoutes);
 app.use(pageRoutes);
