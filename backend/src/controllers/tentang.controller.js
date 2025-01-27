@@ -287,8 +287,9 @@ const uploadStruktur = async (req, res) => {
 
     const oldStrukturImagePath = result.strukturPemerintahImage;
 
+    // Check if the old image file exists and delete it
     if (oldStrukturImagePath && fs.existsSync(oldStrukturImagePath)) {
-      await unlinkAsync(strukturImageloadDir);
+      await unlinkAsync(oldStrukturImagePath); // Delete the old file, not the directory
       console.log(`Old file deleted: ${oldStrukturImagePath}`);
     }
 
@@ -305,12 +306,12 @@ const uploadStruktur = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "Small image updated successfully",
+      message: "Struktur image updated successfully",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Error uploading file and updating small image",
+      message: "Error uploading file and updating struktur image",
       error: error.message,
     });
   }
