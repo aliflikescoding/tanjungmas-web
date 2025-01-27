@@ -134,3 +134,12 @@ export const getSmallImage = async () => {
     throw new Error(err);
   }
 };
+
+export const getVisi = async () => {
+  try {
+    const response = await api.get("/tentang/visi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

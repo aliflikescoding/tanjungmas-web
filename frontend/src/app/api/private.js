@@ -160,3 +160,14 @@ export const updateSmallImage = async (file) => {
     throw err;
   }
 };
+
+// visi
+export const updateVisi = async (visi) => {
+  try {
+    const response = await api.put("/tentang/visi", { visi });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to update visi:", err);
+    throw err;
+  }
+}
