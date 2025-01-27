@@ -126,3 +126,37 @@ export const deleteFooterImage = async (id) => {
     throw err;
   }
 };
+
+export const updateBigImage = async (file) => {
+  const formData = new FormData();
+  formData.append("bigImage", file);
+
+  try {
+    const response = await api.post("/tentang/big", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+}
+
+export const updateSmallImage = async (file) => {
+  const formData = new FormData();
+  formData.append("smallImage", file);
+  
+  try {
+    const response = await api.post("/tentang/small", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload logo:", err);
+    throw err;
+  }
+};

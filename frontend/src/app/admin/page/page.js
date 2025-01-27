@@ -7,7 +7,7 @@ import FooterImages from "@/components/admin/page/FooterImages";
 const AdminPage = () => {
   return (
     <>
-      <h1 className="text-3xl font-medium">Admin Page Images</h1>
+      <h1 className="text-3xl font-medium">Page Section</h1>
       <LogoImage />
       <NavbarImages />
       <HeroImage />

@@ -5,12 +5,12 @@ import { Table } from "antd";
 import { getFooterImages } from "@/app/api/public";
 import { Button, Modal, message, Upload } from "antd";
 import { DeleteOutlined, InboxOutlined } from "@ant-design/icons";
-import { deleteInfoImage, createInfoImage } from "@/app/api/private";
+import { deleteFooterImage, createFooterImage } from "@/app/api/private";
 
 const { Dragger } = Upload;
 
 const FooterImages = () => {
-  const [infoImages, setInfoImages] = useState([]);
+  const [footerImages, setFooterImages] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
@@ -22,24 +22,24 @@ const FooterImages = () => {
   };
 
   useEffect(() => {
-    const fetchInfoImages = async () => {
+    const fetchFooterImages = async () => {
       try {
         const response = await getFooterImages();
-        setInfoImages(response);
+        setFooterImages(response);
       } catch (err) {
-        console.error("Failed to fetch info images:", err);
+        console.error("Failed to fetch footer images:", err);
       }
     };
 
-    fetchInfoImages();
+    fetchFooterImages();
   }, []);
 
   const handleDeleteOk = async () => {
-    await deleteInfoImage(selectedImageId);
-    message.success(`Info image ${selectedImageId} deleted successfully!`);
+    await deleteFooterImage(selectedImageId);
+    message.success(`Footer image ${selectedImageId} deleted successfully!`);
     setSelectedImageId(null);
-    const refreshedInfoImages = await getFooterImages();
-    setInfoImages(refreshedInfoImages);
+    const refreshedFooterImages = await getFooterImages();
+    setFooterImages(refreshedFooterImages);
     setIsDeleteModalOpen(false);
   };
 
@@ -50,20 +50,20 @@ const FooterImages = () => {
   const handleUploadOk = async () => {
     if (fileToUpload) {
       const hideLoadingMessage = message.loading({
-        content: "Uploading info image...",
+        content: "Uploading footer image...",
         duration: 0,
       });
       try {
-        await createInfoImage(fileToUpload);
+        await createFooterImage(fileToUpload);
         hideLoadingMessage();
-        message.success("Info image updated successfully!");
+        message.success("Footer image updated successfully!");
         setFileToUpload(null);
         setIsUploadModalOpen(false);
-        const refreshedInfoImages = await getFooterImages();
-        setInfoImages(refreshedInfoImages);
+        const refreshedFooterImages = await getFooterImages();
+        setFooterImages(refreshedFooterImages);
       } catch (err) {
         hideLoadingMessage();
-        message.error("Failed to upload info image.");
+        message.error("Failed to upload footer image.");
       }
     } else {
       message.error("No file selected!");
@@ -104,7 +104,7 @@ const FooterImages = () => {
         text ? (
           <img
             src={text.replace("./public", "")}
-            alt="Info"
+            alt="Footer"
             style={{ width: "100px", height: "auto" }}
           />
         ) : (
@@ -128,7 +128,7 @@ const FooterImages = () => {
     },
   ];
 
-  const dataSource = infoImages.map((item) => ({
+  const dataSource = footerImages.map((item) => ({
     key: item.id,
     id: item.id,
     image: item.image,
@@ -142,10 +142,10 @@ const FooterImages = () => {
         onClick={() => setIsUploadModalOpen(true)}
         className="mb-4"
       >
-        Upload New Info Image
+        Upload New Footer Image
       </Button>
       <Modal
-        title="Upload New Info Image"
+        title="Upload New Footer Image"
         open={isUploadModalOpen}
         onOk={handleUploadOk}
         onCancel={handleUploadCancel}

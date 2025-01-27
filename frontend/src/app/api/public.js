@@ -108,3 +108,29 @@ export const getFooterImages = async () => {
     throw new Error(err);
   }
 };
+
+export const getBigImage = async () => {
+  try {
+    const response = await api.get("/tentang/big");
+    const heroImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return heroImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSmallImage = async () => {
+  try {
+    const response = await api.get("/tentang/small");
+    const smallImagePath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return smallImagePath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
