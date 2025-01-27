@@ -143,3 +143,12 @@ export const getVisi = async () => {
     throw new Error(err);
   }
 }
+
+export const getMisi = async () => {
+  try {
+    const response = await api.get("/tentang/misi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

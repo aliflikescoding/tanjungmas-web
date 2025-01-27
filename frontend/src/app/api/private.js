@@ -171,3 +171,23 @@ export const updateVisi = async (visi) => {
     throw err;
   }
 }
+
+// misi
+export const createMisi = async (title) => {
+  try {
+    const response = await api.post("/tentang/misi", { title }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+export const deleteMisi = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/misi/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
