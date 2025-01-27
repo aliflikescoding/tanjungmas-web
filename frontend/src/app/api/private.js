@@ -191,3 +191,20 @@ export const deleteMisi = async (id) => {
     throw new Error(err);
   }
 }
+
+export const updateStruktur = async (file) => {
+  const formData = new FormData();
+  formData.append("strukturImage", file);
+
+  try {
+    const response = await api.post("/tentang/struktur", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to upload struktur:", err);
+    throw err;
+  }
+};

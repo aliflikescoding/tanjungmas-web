@@ -152,3 +152,16 @@ export const getMisi = async () => {
     throw new Error(err);
   }
 }
+
+export const getStruktur = async () => {
+  try {
+    const response = await api.get("/tentang/struktur");
+    const strukturPath = response.data.replace(
+      /^\.\/public/,
+      "http://localhost:5000"
+    );
+    return strukturPath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};

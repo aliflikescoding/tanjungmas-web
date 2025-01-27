@@ -2,7 +2,7 @@ import BigImage from "@/components/admin/tentang/BigImage";
 import Misi from "@/components/admin/tentang/Misi";
 import SmallImage from "@/components/admin/tentang/SmallImage";
 import Visi from "@/components/admin/tentang/Visi";
-
+import Struktur from "@/components/admin/tentang/Struktur";
 
 const AdminTentang = () => {
   return (
@@ -12,6 +12,7 @@ const AdminTentang = () => {
       <SmallImage />
       <Visi />
       <Misi />
+      <Struktur />
     </>
   );
 };
