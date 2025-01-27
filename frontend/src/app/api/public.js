@@ -142,7 +142,7 @@ export const getVisi = async () => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 export const getMisi = async () => {
   try {
@@ -151,7 +151,7 @@ export const getMisi = async () => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 export const getStruktur = async () => {
   try {
@@ -161,6 +161,58 @@ export const getStruktur = async () => {
       "http://localhost:5000"
     );
     return strukturPath;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFasilitasCategory = async () => {
+  try {
+    const response = await api.get("/tentang/fasilitas-category");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFasilitasCategoryBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/tentang/fasilitas-category/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFasilitasPreviewBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(
+      `/tentang/fasilitas-category/${id}/fasilitas/preview`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getFasiliitasBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/tentang/fasilitas/${id}`);
+
+    // Replace /public with http://localhost:5000/public in fasilitasImages
+    const updatedFasilitasImages = response.data.fasilitasImages.map(
+      (image) => {
+        return {
+          ...image,
+          img: image.img.replace(/^\/public/, "http://localhost:5000"),
+        };
+      }
+    );
+  
+    return {
+      ...response.data,
+      fasilitasImages: updatedFasilitasImages,
+    };
   } catch (err) {
     throw new Error(err);
   }
