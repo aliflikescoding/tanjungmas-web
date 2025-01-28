@@ -292,3 +292,57 @@ export const deleteSarana = async (id) => {
     throw new Error(err);
   }
 };
+
+// prasarana
+export const createPrasarana = async (title) => {
+  try {
+    const response = await api.post("/tentang/prasarana", { title });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create prasarana:", err);
+    throw err;
+  }
+};
+
+export const deletePrasarana = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/prasarana/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// data monografi
+export const createDataMonografi = async (title, link) => {
+  try {
+    const response = await api.post("/tentang/data-monografi", { title, link });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create data monografi:", err);
+    throw err;
+  }
+};
+
+export const deleteDataMonografi = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/data-monografi/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// In your api/private.js
+export const updateDataMonografi = async (id, title, link) => {
+  try {
+    const response = await api.put(`/tentang/data-monografi/${id}`, {
+      title,
+      link,
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update data monografi:", err);
+    throw err;
+  }
+};

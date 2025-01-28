@@ -226,3 +226,23 @@ export const getSarana = async () => {
     throw new Error(err);
   }
 }
+
+export const getPrasarana = async () => {
+  try {
+    const response = await api.get("/tentang/prasarana");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getDataMonografi = async () => {
+  try {
+    const response = await api.get("/tentang/data-monografi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+

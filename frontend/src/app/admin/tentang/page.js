@@ -5,6 +5,8 @@ import Visi from "@/components/admin/tentang/Visi";
 import Struktur from "@/components/admin/tentang/Struktur";
 import FasilitasCategory from "@/components/admin/tentang/FasilitasCategory";
 import Sarana from "@/components/admin/tentang/Sarana";
+import Prasarana from "@/components/admin/tentang/Prasarana";
+import DataMonografi from "@/components/admin/tentang/DataMonografi";
 
 const AdminTentang = () => {
   return (
@@ -17,6 +19,8 @@ const AdminTentang = () => {
       <Struktur />
       <FasilitasCategory />
       <Sarana />
+      <Prasarana />
+      <DataMonografi />
     </>
   );
 };
