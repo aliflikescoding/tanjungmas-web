@@ -44,6 +44,10 @@ const {
   getFasilitasPreview,
   getFasilitasBasedOnId,
   getFasilitasByCategoryPreview,
+  getPrasarana,
+  postPrasarana,
+  updatePrasarana,
+  deletePrasarana,
 } = require("../controllers/tentang.controller");
 
 // Routes for big image
@@ -126,6 +130,12 @@ router.get("/tentang/sarana", getSarana);
 router.post("/tentang/sarana", verifyJWT, postSarana);
 router.put("/tentang/sarana/:id", verifyJWT, updateSarana);
 router.delete("/tentang/sarana/:id", verifyJWT, deleteSarana);
+
+// Routes for Prasarana
+router.get("/tentang/prasarana", getPrasarana);
+router.post("/tentang/prasarana", verifyJWT, postPrasarana);
+router.put("/tentang/prasarana/:id", verifyJWT, updatePrasarana);
+router.delete("/tentang/prasarana/:id", verifyJWT, deletePrasarana);
 
 // Routes for data monografi
 router.get("/tentang/data-monografi", getDataMonografi);

@@ -406,14 +406,25 @@ const deleteFasilitasCategory = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await prisma.fasilitasCategory.delete({
-      where: {
-        id: parseInt(id),
-      },
+    await prisma.$transaction(async (prisma) => {
+      // Delete associated fasilitas entries first
+      await prisma.fasilitas.deleteMany({
+        where: {
+          categoryId: parseInt(id),
+        },
+      });
+
+      // Then delete the fasilitasCategory
+      await prisma.fasilitasCategory.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
     });
 
     res.status(200).json({
-      message: "Fasilitas category deleted successfully",
+      message:
+        "Fasilitas category and associated fasilitas deleted successfully",
     });
   } catch (error) {
     console.error(error);
@@ -752,6 +763,91 @@ const deleteSarana = async (req, res) => {
   }
 };
 
+// Controller to fetch Prasarana
+const getPrasarana = async (req, res) => {
+  try {
+    const response = await prisma.prasarana.findMany();
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching prasarana",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to post Prasarana
+const postPrasarana = async (req, res) => {
+  try {
+    await prisma.prasarana.create({
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Prasarana added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error adding prasarana",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to update Prasarana
+const updatePrasarana = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.prasarana.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title: req.body.title,
+      },
+    });
+
+    res.status(200).json({
+      message: "Prasarana updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error updating prasarana",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to delete Prasarana
+const deletePrasarana = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.prasarana.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json({
+      message: "Prasarana deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting prasarana",
+      error: error.message,
+    });
+  }
+};
+
 // controller to fetch dataMonografi
 const getDataMonografi = async (req, res) => {
   try {
@@ -971,4 +1067,8 @@ module.exports = {
   getFasilitasPreview,
   getFasilitasBasedOnId,
   getFasilitasByCategoryPreview,
+  getPrasarana,
+  postPrasarana,
+  updatePrasarana,
+  deletePrasarana
 };
