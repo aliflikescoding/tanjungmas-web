@@ -272,3 +272,23 @@ export const updateFasilitas = async (id, formData) => {
     throw err; // Don't wrap in new Error() as it loses the original error details
   }
 };
+
+// sarana
+export const createSarana = async (title) => {
+  try {
+    const response = await api.post("/tentang/sarana", { title }); // Use 'title' instead of 'sarana'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create sarana:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+export const deleteSarana = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/sarana/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};

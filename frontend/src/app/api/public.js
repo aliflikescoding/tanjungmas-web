@@ -217,3 +217,12 @@ export const getFasiliitasBasedOnId = async (id) => {
     throw new Error(err);
   }
 };
+
+export const getSarana = async () => {
+  try {
+    const response = await api.get("/tentang/sarana");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
