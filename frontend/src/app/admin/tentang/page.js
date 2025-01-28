@@ -7,6 +7,8 @@ import FasilitasCategory from "@/components/admin/tentang/FasilitasCategory";
 import Sarana from "@/components/admin/tentang/Sarana";
 import Prasarana from "@/components/admin/tentang/Prasarana";
 import DataMonografi from "@/components/admin/tentang/DataMonografi";
+import SDM from "@/components/admin/tentang/SDM";
+import Regulasi from "@/components/admin/tentang/Regulasi";
 
 const AdminTentang = () => {
   return (
@@ -21,6 +23,8 @@ const AdminTentang = () => {
       <Sarana />
       <Prasarana />
       <DataMonografi />
+      <SDM />
+      <Regulasi />
     </>
   );
 };

@@ -245,4 +245,21 @@ export const getDataMonografi = async () => {
   }
 };
 
+export const getSdm = async () => {
+  try {
+    const response = await api.get("/tentang/sdm");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getRegulasi = async () => {
+  try {
+    const response = await api.get("/tentang/regulasi");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
 

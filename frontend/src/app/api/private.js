@@ -346,3 +346,25 @@ export const updateDataMonografi = async (id, title, link) => {
     throw err;
   }
 };
+
+// sdm
+export const updateSdm = async (sdm) => {
+  try {
+    const response = await api.put("/tentang/sdm", { sdm });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update SDM:", err);
+    throw err;
+  }
+};
+
+// regulasi
+export const updateRegulasi = async (regulasi) => {
+  try {
+    const response = await api.put("/tentang/regulasi", { regulasi });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update Regulasi:", err);
+    throw err;
+  }
+};
