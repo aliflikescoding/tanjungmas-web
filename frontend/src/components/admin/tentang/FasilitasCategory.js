@@ -103,7 +103,8 @@ const FasilitasCategory = () => {
   const handleDelete = (id) => {
     Modal.confirm({
       title: "Are you sure you want to delete this fasilitas category?",
-      content: "This action cannot be undone.",
+      content:
+        "This action cannot be undone, this will also delete all fasilitas with this category.",
       okText: "Yes, delete it",
       okType: "danger",
       cancelText: "No, cancel",

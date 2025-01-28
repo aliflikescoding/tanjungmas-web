@@ -12,6 +12,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 
@@ -136,6 +137,9 @@ const Page = ({ params }) => {
 
   return (
     <div>
+      <Link href={`/admin/tentang`} className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500">
+        <ArrowLeftOutlined className="text-2xl" /> <p className="text-lg">Go Back</p>
+      </Link>
       <h1 className="text-4xl font-medium mb-3">Fasilitas {name}</h1>
       <Link href={`/admin/tentang/fasilitas-category/${slug}/newBlog`}>
         <Button

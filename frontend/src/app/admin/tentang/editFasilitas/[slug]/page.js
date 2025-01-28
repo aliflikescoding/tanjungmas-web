@@ -12,6 +12,8 @@ import {
 import { updateFasilitas } from "@/app/api/private";
 import { getFasiliitasBasedOnId } from "@/app/api/public";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Dragger } = Upload;
 
@@ -126,6 +128,13 @@ const EditFasilitas = ({ params: paramsPromise }) => {
 
   return (
     <div>
+      <Link
+        href={`/admin/tentang/fasilitas-category/${fasilitas?.categoryId}`}
+        className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
+      >
+        <ArrowLeftOutlined className="text-2xl" />{" "}
+        <p className="text-lg">Go Back</p>
+      </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
         Edit {fasilitas?.title}
       </h1>
