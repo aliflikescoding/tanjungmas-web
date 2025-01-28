@@ -424,6 +424,27 @@ const deleteFasilitasCategory = async (req, res) => {
   }
 };
 
+// controller to get fasilitas cateogry based on id
+const getFasilitasCategoryBasedOnId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.fasilitasCategory.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
 // controller to get all fasilitas
 const getFasilitas = async (req, res) => {
   try {
@@ -443,6 +464,48 @@ const getFasilitas = async (req, res) => {
   }
 };
 
+const getFasilitasPreview = async (req, res) => {
+  try {
+    const response = await prisma.fasilitas.findMany({
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+}
+
+const getFasilitasBasedOnId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.fasilitas.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        fasilitasImages: true, // Include the related images
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas category",
+      error: error.message,
+    });
+  }
+};
 
 // controller to get all fasilitas based on category
 const getFasilitasByCategory = async (req, res) => {
@@ -464,6 +527,32 @@ const getFasilitasByCategory = async (req, res) => {
     });
   }
 };
+
+const getFasilitasByCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.fasilitas.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+};
+
 
 // controler to create fasilitas
 const postFasilitas = async (req, res) => {
@@ -878,4 +967,8 @@ module.exports = {
   updateSdm,
   getRegulasi,
   updateRegulasi,
+  getFasilitasCategoryBasedOnId,
+  getFasilitasPreview,
+  getFasilitasBasedOnId,
+  getFasilitasByCategoryPreview,
 };
