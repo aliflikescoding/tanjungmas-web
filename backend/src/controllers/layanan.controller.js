@@ -20,6 +20,26 @@ const getLayananCategory = async (req, res) => {
   }
 };
 
+const getLayananCategoryBasedOnID = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.layananCategory.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.stsatus(500).json({
+      message: "Error fetching layanan category",
+      error: err.message,
+    })
+  }
+}
+
 // controller to post layanan category
 const postLayananCategory = async (req, res) => {
   try {
@@ -265,6 +285,74 @@ const getLayananBlogByCategory = async (req, res) => {
   }
 };
 
+const getLayananBlogPreview = async (req, res) => {
+  try {
+    const response = await prisma.layananBlog.findMany({
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+}
+
+const getLayananBlogBasedOnId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.layananBlog.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        fasilitasImages: true, // Include the related images
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas category",
+      error: error.message,
+    });
+  }
+};
+
+const getLayananBlogByCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.layananBlog.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching fasilitas",
+      error: error.message,
+    });
+  }
+};
+
 // controler to create layananBlog
 const postLayananBlog = async (req, res) => {
   try {
@@ -393,4 +481,8 @@ module.exports = {
   postLayananBlog,
   putLayananBlog,
   deleteLayananBlog,
+  getLayananCategoryBasedOnID,
+  getLayananBlogPreview,
+  getLayananBlogBasedOnId,
+  getLayananBlogByCategoryPreview,
 };

@@ -263,3 +263,56 @@ export const getRegulasi = async () => {
   }
 };
 
+// layanan category
+export const getLayananCategory = async () => {
+  try {
+    const response = await api.get("/layanan/category");
+    return response.data;
+  } catch (err) {
+    
+  }
+}
+
+export const getLayananCategoryBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/category/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getLayananBlogPreviewBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(
+      `/layanan/category/${id}/blog/preview`
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getLayananBlogBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/blog/${id}`);
+
+    // Replace /public with http://localhost:5000/public in fasilitasImages
+    const updatedFasilitasImages = response.data.fasilitasImages.map(
+      (image) => {
+        return {
+          ...image,
+          img: image.img.replace(/^\/public/, "http://localhost:5000"),
+        };
+      }
+    );
+
+    return {
+      ...response.data,
+      fasilitasImages: updatedFasilitasImages,
+    };
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+

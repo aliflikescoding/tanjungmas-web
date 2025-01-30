@@ -242,7 +242,7 @@ export const updateFasilitasCategory = async (title, id) => {
   }
 };
 
-// create fasilitas (blog)
+// fasilitas (blog)
 export const createFasilitas = async (formData) => {
   try {
     const response = await api.post(`/tentang/fasilitas`, formData, {
@@ -272,6 +272,15 @@ export const updateFasilitas = async (id, formData) => {
     throw err; // Don't wrap in new Error() as it loses the original error details
   }
 };
+
+export const deleteFasilitas = async (id) => {
+  try {
+    const response = await api.delete(`/tentang/fasilitas/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
 // sarana
 export const createSarana = async (title) => {
@@ -366,5 +375,77 @@ export const updateRegulasi = async (regulasi) => {
   } catch (err) {
     console.error("Failed to update Regulasi:", err);
     throw err;
+  }
+};
+
+// layanan category
+export const createLayananCategory = async (title) => {
+  try {
+    const response = await api.post("/layanan/category", { title }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+export const deleteLayananCategory = async (id) => {
+  try {
+    const response = await api.delete(`/layanan/category/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateLayananCategory = async (title, id) => {
+  try {
+    const response = await api.put(`/layanan/category/${id}`, {
+      title,
+    }); // Use 'title' instead of 'misi'
+    return response.data; // Adjust based on backend response format
+  } catch (err) {
+    console.error("Failed to create misi:", err); // Updated error message for clarity
+    throw err;
+  }
+};
+
+// layanan blog
+export const createLayananBlog = async (formData) => {
+  try {
+    const response = await api.post(`/layanan/blog`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updateLayananBlog = async (id, formData) => {
+  try {
+    const response = await api.put(`/layanan/blog/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    console.error(
+      "Error updating fasilitas:",
+      err.response?.data || err.message
+    );
+    throw err; // Don't wrap in new Error() as it loses the original error details
+  }
+};
+
+export const deleteLayananBlog = async (id) => {
+  try {
+    const response = await api.delete(`/layanan/blog/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
   }
 };

@@ -2,10 +2,10 @@
 
 import { Button, Modal, Form, Input, message, Table } from "antd";
 import {
-  getFasilitasCategoryBasedOnId,
-  getFasilitasPreviewBasedOnCategoryId,
+  getLayananCategoryBasedOnId,
+  getLayananBlogPreviewBasedOnCategoryId,
 } from "@/app/api/public";
-import { deleteFasilitas } from "@/app/api/private";
+import { deleteLayananBlog } from "@/app/api/private";
 import React, { useEffect, useState } from "react";
 import {
   PlusOutlined,
@@ -23,31 +23,31 @@ const Page = ({ params }) => {
   const { slug } = unwrappedParams;
 
   const [name, setName] = useState("");
-  const [fasilitas, setFasilitas] = useState([]);
+  const [layananBlog, setLayananBlog] = useState([]);
 
   useEffect(() => {
-    const fetchFasilitasName = async () => {
-      const response = await getFasilitasCategoryBasedOnId(parseInt(slug));
+    const fetchLayananName = async () => {
+      const response = await getLayananCategoryBasedOnId(parseInt(slug));
       setName(response.title);
     };
 
-    fetchFasilitasName();
+    fetchLayananName();
   }, [slug]);
 
   useEffect(() => {
-    const fetchFasilitas = async () => {
-      const response = await getFasilitasPreviewBasedOnCategoryId(
+    const fetchLayananBlog = async () => {
+      const response = await getLayananBlogPreviewBasedOnCategoryId(
         parseInt(slug)
       );
-      setFasilitas(response);
+      setLayananBlog(response);
     };
 
-    fetchFasilitas();
+    fetchLayananBlog();
   }, [slug]);
 
   const showDeleteConfirm = (id) => {
     confirm({
-      title: "Are you sure you want to delete this fasilitas?",
+      title: "Are you sure you want to delete this layanan blog?",
       icon: <ExclamationCircleOutlined />,
       content: "This action cannot be undone.",
       okText: "Yes",
@@ -64,22 +64,22 @@ const Page = ({ params }) => {
 
   const handleDelete = async (id) => {
     const hideLoadingMessage = message.loading({
-      content: "Deleting fasilitas...",
+      content: "Deleting layanan blog...",
       duration: 0,
     });
 
     try {
-      await deleteFasilitas(id);
+      await deleteLayananBlog(id);
       hideLoadingMessage();
-      message.success("Fasilitas deleted successfully!");
-      const refreshedFasilitas = await getFasilitasPreviewBasedOnCategoryId(
+      message.success("Layanan blog deleted successfully!");
+      const refreshedLayananBlog = await getLayananBlogPreviewBasedOnCategoryId(
         parseInt(slug)
       );
-      setFasilitas(refreshedFasilitas);
+      setLayananBlog(refreshedLayananBlog);
     } catch (err) {
       hideLoadingMessage();
-      message.error("Failed to delete fasilitas.");
-      console.error("Error while deleting fasilitas:", err);
+      message.error("Failed to delete layanan blog.");
+      console.error("Error while deleting layanan blog:", err);
     }
   };
 
@@ -104,9 +104,7 @@ const Page = ({ params }) => {
       key: "action",
       render: (record) => (
         <div className="flex gap-2">
-          <Link
-            href={`/admin/tentang/editFasilitas/${record.id}`}
-          >
+          <Link href={`/admin/tentang/editLayananBlog/${record.id}`}>
             <Button type="primary" size="medium" icon={<EditOutlined />}>
               Edit
             </Button>
@@ -120,15 +118,15 @@ const Page = ({ params }) => {
           >
             Delete
           </Button>
-          <Link target="_" href={`/fasilitas/${record.id}`}>
-            <Button size="medium">See Fasilitas</Button>
+          <Link target="_" href={`/layanan-blog/${record.id}`}>
+            <Button size="medium">See Layanan Blog</Button>
           </Link>
         </div>
       ),
     },
   ];
 
-  const dataSource = fasilitas.map((item) => ({
+  const dataSource = layananBlog.map((item) => ({
     key: item.id,
     id: item.id,
     title: item.title,
@@ -137,18 +135,22 @@ const Page = ({ params }) => {
 
   return (
     <div>
-      <Link href={`/admin/tentang`} className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500">
-        <ArrowLeftOutlined className="text-2xl" /> <p className="text-lg">Go Back</p>
+      <Link
+        href={`/admin/tentang`}
+        className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
+      >
+        <ArrowLeftOutlined className="text-2xl" />{" "}
+        <p className="text-lg">Go Back</p>
       </Link>
-      <h1 className="text-4xl font-medium mb-3">Fasilitas {name}</h1>
-      <Link href={`/admin/tentang/fasilitas-category/${slug}/newBlog`}>
+      <h1 className="text-4xl font-medium mb-3">Layanan Blog {name}</h1>
+      <Link href={`/admin/tentang/layanan-category/${slug}/newBlog`}>
         <Button
           type="primary"
           icon={<PlusOutlined />}
           size="large"
           className="mb-4"
         >
-          Create New Fasilitas
+          Create New Layanan Blog
         </Button>
       </Link>
       <Table columns={columns} dataSource={dataSource} pagination={false} />
