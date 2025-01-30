@@ -143,7 +143,7 @@ const Page = ({ params }) => {
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3">Layanan Blog {name}</h1>
-      <Link href={`/admin/tentang/layanan-category/${slug}/newBlog`}>
+      <Link href={`/admin/layanan/category/${slug}/newBlog`}>
         <Button
           type="primary"
           icon={<PlusOutlined />}
