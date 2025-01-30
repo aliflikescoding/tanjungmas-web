@@ -86,7 +86,7 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("content", layananContent);
+    formData.append("layananContent", content);
     formData.append("categoryId", layananBlog.categoryId); // Ensure categoryId is a number
 
     // Append existing image IDs (for tracking deletions)
@@ -105,7 +105,7 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
       setIsLoading(false);
       message.success("Layanan blog updated successfully!");
       setTimeout(() => {
-        router.push(`/admin/tentang`); // Redirect after success
+        router.push(`/admin/layanan/category/${layananBlog.categoryId}`); // Redirect after success
       }, 1000);
     } catch (err) {
       hideLoadingMessage();

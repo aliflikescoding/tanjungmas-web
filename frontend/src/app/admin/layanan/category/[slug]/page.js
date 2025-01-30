@@ -136,7 +136,7 @@ const Page = ({ params }) => {
   return (
     <div>
       <Link
-        href={`/admin/tentang`}
+        href={`/admin/layanan`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
