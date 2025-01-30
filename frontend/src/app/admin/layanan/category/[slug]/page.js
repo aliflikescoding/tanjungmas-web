@@ -104,7 +104,7 @@ const Page = ({ params }) => {
       key: "action",
       render: (record) => (
         <div className="flex gap-2">
-          <Link href={`/admin/tentang/editLayananBlog/${record.id}`}>
+          <Link href={`/admin/layanan/editBlog/${record.id}`}>
             <Button type="primary" size="medium" icon={<EditOutlined />}>
               Edit
             </Button>

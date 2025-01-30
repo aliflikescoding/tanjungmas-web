@@ -298,7 +298,7 @@ export const getLayananBlogBasedOnId = async (id) => {
     const response = await api.get(`/layanan/blog/${id}`);
 
     // Replace /public with http://localhost:5000/public in fasilitasImages
-    const updatedFasilitasImages = response.data.fasilitasImages.map(
+    const updatedImages = response.data.images.map(
       (image) => {
         return {
           ...image,
@@ -306,11 +306,15 @@ export const getLayananBlogBasedOnId = async (id) => {
         };
       }
     );
-
-    return {
+    
+    const updatedResponse = {
       ...response.data,
-      fasilitasImages: updatedFasilitasImages,
+      images: updatedImages,
     };
+
+    console.log(updatedResponse);
+
+    return updatedResponse;
   } catch (err) {
     throw new Error(err);
   }

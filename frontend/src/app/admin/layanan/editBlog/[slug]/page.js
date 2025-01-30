@@ -4,57 +4,55 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill-new"; // Updated import
 import "react-quill-new/dist/quill.snow.css"; // Updated import
 import { Form, Input, Button, Upload, Modal, message } from "antd";
-import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
-import { getLayananCategoryBasedOnId } from "@/app/api/public";
-import { createLayananBlog } from "@/app/api/private";
+import {
+  UploadOutlined,
+  InboxOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { updateLayananBlog } from "@/app/api/private";
+import { getLayananBlogBasedOnId } from "@/app/api/public";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Dragger } = Upload;
 
-const Page = ({ params: paramsPromise }) => {
-  // Unwrap params using React.use()
+const EditLayananBlog = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
-  const { slug } = params; // Destructure slug from unwrapped params
+  const { slug } = params;
 
-  const [name, setName] = useState("");
-  const [form] = Form.useForm(); // Ant Design Form instance
+  const [layananBlog, setLayananBlog] = useState(null);
+  const [form] = Form.useForm();
   const [content, setContent] = useState("");
-  const [images, setImages] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const [filesToUpload, setFilesToUpload] = useState([]); // Files to upload
+  const [existingImages, setExistingImages] = useState([]); // Existing images from the API
+  const [newImages, setNewImages] = useState([]); // New images to be uploaded
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filesToUpload, setFilesToUpload] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter(); // Use the useRouter hook at the top level
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchLayananName = async () => {
-      try {
-        const response = await getLayananCategoryBasedOnId(parseInt(slug));
-        if (response && response.title) {
-          setName(response.title);
-        } else {
-          console.error("No data returned from API");
-          setName("Unknown Category"); // Fallback name
-        }
-      } catch (error) {
-        console.error("Error fetching category name:", error);
-        setName("Unknown Category"); // Fallback name
-      }
+    const fetchLayananBlog = async () => {
+      const response = await getLayananBlogBasedOnId(parseInt(slug));
+      setLayananBlog(response);
+      form.setFieldsValue({
+        title: response.title,
+        sinopsis: response.sinopsis,
+      });
+      setContent(response.layananContent);
+      setExistingImages(response.images || []); // Set existing images
     };
 
-    fetchLayananName();
-  }, [slug]);
+    fetchLayananBlog();
+  }, [slug, form]);
 
-  // Handle image upload via modal
   const handleImageUpload = (files) => {
     setFilesToUpload(files);
   };
 
-  // Handle modal OK button (add files to images list)
   const handleModalOk = () => {
     if (filesToUpload.length > 0) {
-      setImages([...images, ...filesToUpload]); // Add the files to the images list
+      setNewImages([...newImages, ...filesToUpload]); // Add new files to the newImages list
       setFilesToUpload([]); // Clear the files to upload
       setIsModalOpen(false); // Close the modal
       message.success("Files added successfully!");
@@ -63,44 +61,59 @@ const Page = ({ params: paramsPromise }) => {
     }
   };
 
-  // Handle modal cancel
   const handleModalCancel = () => {
     setIsModalOpen(false);
     setFilesToUpload([]); // Clear the files to upload
   };
 
-  // Handle form submission
+  const handleRemoveExistingImage = (imageId) => {
+    setExistingImages((prev) => prev.filter((img) => img.id !== imageId)); // Remove the image from the existing images list
+    message.success("Image removed successfully!");
+  };
+
+  const handleRemoveNewImage = (fileIndex) => {
+    setNewImages((prev) => prev.filter((_, index) => index !== fileIndex)); // Remove the image from the new images list
+    message.success("Image removed successfully!");
+  };
+
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const hideLoadingMessage = message.loading({
-      content: "Uploading big image...",
+      content: "Updating layanan blog...",
       duration: 0,
     });
+
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("layananContent", content);
-    formData.append("categoryId", parseInt(slug)); // Ensure categoryId is a number
-    images.forEach((image) => {
+    formData.append("content", layananContent);
+    formData.append("categoryId", layananBlog.categoryId); // Ensure categoryId is a number
+
+    // Append existing image IDs (for tracking deletions)
+    existingImages.forEach((image) => {
+      formData.append("existingImageIds", image.id);
+    });
+
+    // Append new images
+    newImages.forEach((image) => {
       formData.append("images", image);
     });
 
     try {
-      await createLayananBlog(formData); // Ensure the request is awaited
+      await updateLayananBlog(parseInt(slug), formData); // Call the update API
       hideLoadingMessage();
       setIsLoading(false);
-      message.success("Page added successfully!");
+      message.success("Layanan blog updated successfully!");
       setTimeout(() => {
-        router.push(`/admin/layanan/category/${slug}`); // Use the router instance
+        router.push(`/admin/tentang`); // Redirect after success
       }, 1000);
     } catch (err) {
-      hideLoadingMessage(); // Hide loading message
+      hideLoadingMessage();
       setIsLoading(false);
-      message.error("Failed to update big image.");
+      message.error("Failed to update layanan blog.");
     }
   };
 
-  // Upload props for the Dragger component
   const uploadProps = {
     name: "file",
     multiple: true, // Allow multiple files
@@ -116,14 +129,14 @@ const Page = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/layanan/category/${slug}`}
+        href={`/admin/layanan/category/${layananBlog?.categoryId}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
-        Create New Layanan for {name}
+        Edit {layananBlog?.title}
       </h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
@@ -155,12 +168,37 @@ const Page = ({ params: paramsPromise }) => {
               Add Images
             </Button>
             <div className="mt-2">
-              {images.map((image, index) => (
-                <div key={index} className="inline-block mr-2">
+              {/* Display existing images */}
+              {existingImages.map((image) => (
+                <div key={image.id} className="inline-block mr-2 relative">
+                  <img
+                    src={image.img}
+                    alt={`Existing ${image.id}`}
+                    className="w-20 h-20 object-cover"
+                  />
+                  <Button
+                    type="link"
+                    danger
+                    icon={<DeleteOutlined />}
+                    className="absolute top-0 right-0"
+                    onClick={() => handleRemoveExistingImage(image.id)}
+                  />
+                </div>
+              ))}
+              {/* Display new images */}
+              {newImages.map((image, index) => (
+                <div key={index} className="inline-block mr-2 relative">
                   <img
                     src={URL.createObjectURL(image)}
                     alt={`Preview ${index}`}
                     className="w-20 h-20 object-cover"
+                  />
+                  <Button
+                    type="link"
+                    danger
+                    icon={<DeleteOutlined />}
+                    className="absolute top-0 right-0"
+                    onClick={() => handleRemoveNewImage(index)}
                   />
                 </div>
               ))}
@@ -204,4 +242,4 @@ const Page = ({ params: paramsPromise }) => {
   );
 };
 
-export default Page;
+export default EditLayananBlog;

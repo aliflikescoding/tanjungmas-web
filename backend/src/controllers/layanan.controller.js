@@ -314,7 +314,7 @@ const getLayananBlogBasedOnId = async (req, res) => {
         id: parseInt(id),
       },
       include: {
-        fasilitasImages: true, // Include the related images
+        images: true, // Include the related images
       },
     });
 
