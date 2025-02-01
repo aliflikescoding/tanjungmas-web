@@ -1,7 +1,13 @@
 import React from "react";
+import InfoCategory from "@/components/admin/info/InfoCategory";
 
-const AdminInfo = () => {
-  return <div>AdminInfo</div>;
+const AdminLayanan = () => {
+  return (
+    <>
+      <h1 className="text-3xl font-medium">Info Section</h1>
+      <InfoCategory />
+    </>
+  );
 };
 
-export default AdminInfo;
+export default AdminLayanan;
