@@ -137,6 +137,37 @@ const getLayananTextBasedOnCategory = async (req, res) => {
   }
 };
 
+const getLayananTextBasedOnCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Fetch entries based on the categoryId from req.params
+    const response = await prisma.layananText.findMany({
+      where: {
+        categoryId: parseInt(id), // Ensure categoryId is parsed as an integer
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    if (response.length === 0) {
+      return res.status(404).json({
+        message: "No layanan text found for the specified category",
+      });
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching layanan category",
+      error: error.message,
+    });
+  }
+};
+
 const getLayananText = async (req, res) => {
   try {
     const response = await prisma.layananText.findMany();
@@ -485,4 +516,5 @@ module.exports = {
   getLayananBlogPreview,
   getLayananBlogBasedOnId,
   getLayananBlogByCategoryPreview,
+  getLayananTextBasedOnCategoryPreview,
 };
