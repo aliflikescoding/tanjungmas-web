@@ -9,13 +9,31 @@ const unlinkAsync = util.promisify(fs.unlink);
 const getInfoCategory = async (req, res) => {
   try {
     const response = await prisma.infoCategory.findMany();
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "Error fetching info category",
       error: error.message,
+    });
+  }
+};
+
+// Controller to get info category by ID
+const getInfoCategoryBasedOnID = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.infoCategory.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error fetching info category",
+      error: err.message,
     });
   }
 };
@@ -28,7 +46,6 @@ const postInfoCategory = async (req, res) => {
         title: req.body.title,
       },
     });
-
     res.status(200).json({
       message: "Info category added successfully",
     });
@@ -44,7 +61,6 @@ const postInfoCategory = async (req, res) => {
 // Controller to update info category
 const updateInfoCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.infoCategory.update({
       where: {
@@ -54,7 +70,6 @@ const updateInfoCategory = async (req, res) => {
         title: req.body.title,
       },
     });
-
     res.status(200).json({
       message: "Info category updated successfully",
     });
@@ -70,14 +85,12 @@ const updateInfoCategory = async (req, res) => {
 // Controller to delete info category
 const deleteInfoCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.infoCategory.delete({
       where: {
         id: parseInt(id),
       },
     });
-
     res.status(200).json({
       message: "Info category deleted successfully",
     });
@@ -93,20 +106,45 @@ const deleteInfoCategory = async (req, res) => {
 // Controller to get info text based on category
 const getInfoTextBasedOnCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     const response = await prisma.infoText.findMany({
       where: {
         categoryId: parseInt(id),
       },
     });
-
     if (response.length === 0) {
       return res.status(404).json({
         message: "No info text found for the specified category",
       });
     }
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching info text",
+      error: error.message,
+    });
+  }
+};
 
+// Controller to get info text based on category (preview)
+const getInfoTextBasedOnCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.infoText.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+    if (response.length === 0) {
+      return res.status(404).json({
+        message: "No info text found for the specified category",
+      });
+    }
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -121,13 +159,36 @@ const getInfoTextBasedOnCategory = async (req, res) => {
 const getInfoText = async (req, res) => {
   try {
     const response = await prisma.infoText.findMany();
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "Error fetching info text",
       error: error.message,
+    });
+  }
+};
+
+// Controller to get info text by ID
+const getInfoTextBasedOnId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.infoText.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    if (!response) {
+      return res.status(404).json({
+        message: "Info text not found",
+      });
+    }
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error fetching info text",
+      error: err.message,
     });
   }
 };
@@ -142,7 +203,6 @@ const postInfoText = async (req, res) => {
         categoryId: req.body.categoryId,
       },
     });
-
     res.status(200).json({
       message: "Info text added successfully",
     });
@@ -158,19 +218,12 @@ const postInfoText = async (req, res) => {
 // Controller to update info text
 const updateInfoText = async (req, res) => {
   const { id } = req.params;
-
   try {
     const data = {};
-
-    if (req.body.title !== undefined) {
-      data.title = req.body.title;
-    }
-    if (req.body.content !== undefined) {
-      data.content = req.body.content;
-    }
-    if (req.body.categoryId !== undefined) {
+    if (req.body.title !== undefined) data.title = req.body.title;
+    if (req.body.content !== undefined) data.content = req.body.content;
+    if (req.body.categoryId !== undefined)
       data.categoryId = req.body.categoryId;
-    }
 
     if (Object.keys(data).length === 0) {
       return res.status(400).json({
@@ -184,7 +237,6 @@ const updateInfoText = async (req, res) => {
       },
       data,
     });
-
     res.status(200).json({
       message: "Info text updated successfully",
     });
@@ -200,14 +252,12 @@ const updateInfoText = async (req, res) => {
 // Controller to delete info text
 const deleteInfoText = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.infoText.delete({
       where: {
         id: parseInt(id),
       },
     });
-
     res.status(200).json({
       message: "Info text deleted successfully",
     });
@@ -228,7 +278,6 @@ const getInfoBlog = async (req, res) => {
         images: true,
       },
     });
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -239,10 +288,9 @@ const getInfoBlog = async (req, res) => {
   }
 };
 
-// Controller to get info blog based on category
+// Controller to get info blog by category
 const getInfoBlogByCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     const response = await prisma.infoBlog.findMany({
       where: {
@@ -252,7 +300,6 @@ const getInfoBlogByCategory = async (req, res) => {
         images: true,
       },
     });
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -263,11 +310,76 @@ const getInfoBlogByCategory = async (req, res) => {
   }
 };
 
+// Controller to get info blog preview
+const getInfoBlogPreview = async (req, res) => {
+  try {
+    const response = await prisma.infoBlog.findMany({
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching info blog preview",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to get info blog by ID
+const getInfoBlogBasedOnId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.infoBlog.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        images: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching info blog",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to get info blog by category (preview)
+const getInfoBlogByCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.infoBlog.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching info blog preview",
+      error: error.message,
+    });
+  }
+};
+
 // Controller to post info blog
 const postInfoBlog = async (req, res) => {
   try {
     const { title, sinopsis, infoBlogContent, categoryId } = req.body;
-
     const infoBlog = await prisma.infoBlog.create({
       data: {
         title,
@@ -282,7 +394,6 @@ const postInfoBlog = async (req, res) => {
         img: `/public/infoBlogImages/${file.filename}`,
         infoBlogId: infoBlog.id,
       }));
-
       await prisma.infoBlogImage.createMany({
         data: imageRecords,
       });
@@ -349,11 +460,9 @@ const putInfoBlog = async (req, res) => {
 const deleteInfoBlog = async (req, res) => {
   try {
     const { id } = req.params;
-
     await prisma.infoBlog.delete({
       where: { id: parseInt(id) },
     });
-
     res.status(200).json({
       message: "Info blog deleted successfully",
     });
@@ -368,16 +477,22 @@ const deleteInfoBlog = async (req, res) => {
 
 module.exports = {
   getInfoCategory,
+  getInfoCategoryBasedOnID,
   postInfoCategory,
   updateInfoCategory,
   deleteInfoCategory,
   getInfoTextBasedOnCategory,
+  getInfoTextBasedOnCategoryPreview,
   getInfoText,
+  getInfoTextBasedOnId,
   postInfoText,
   updateInfoText,
   deleteInfoText,
   getInfoBlog,
   getInfoBlogByCategory,
+  getInfoBlogPreview,
+  getInfoBlogBasedOnId,
+  getInfoBlogByCategoryPreview,
   postInfoBlog,
   putInfoBlog,
   deleteInfoBlog,
