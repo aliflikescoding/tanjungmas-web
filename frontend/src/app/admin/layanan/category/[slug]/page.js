@@ -4,8 +4,9 @@ import { Button, Modal, Form, Input, message, Table } from "antd";
 import {
   getLayananCategoryBasedOnId,
   getLayananBlogPreviewBasedOnCategoryId,
+  getLayananTextBasedOnCategoryId,
 } from "@/app/api/public";
-import { deleteLayananBlog } from "@/app/api/private";
+import { deleteLayananBlog, deleteLayanantext } from "@/app/api/private"; // Import the new function
 import React, { useEffect, useState } from "react";
 import {
   PlusOutlined,
@@ -24,6 +25,7 @@ const Page = ({ params }) => {
 
   const [name, setName] = useState("");
   const [layananBlog, setLayananBlog] = useState([]);
+  const [layananText, setLayananText] = useState([]);
 
   useEffect(() => {
     const fetchLayananName = async () => {
@@ -45,16 +47,30 @@ const Page = ({ params }) => {
     fetchLayananBlog();
   }, [slug]);
 
-  const showDeleteConfirm = (id) => {
+  useEffect(() => {
+    const fetchLayananText = async () => {
+      const response = await getLayananTextBasedOnCategoryId(parseInt(slug));
+      console.log(response);
+      setLayananText(response);
+    };
+
+    fetchLayananText();
+  }, [slug]);
+
+  const showDeleteConfirm = (id, type) => {
     confirm({
-      title: "Are you sure you want to delete this layanan blog?",
+      title: `Are you sure you want to delete this ${type}?`,
       icon: <ExclamationCircleOutlined />,
       content: "This action cannot be undone.",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
       onOk() {
-        handleDelete(id);
+        if (type === "blog") {
+          handleDeleteBlog(id);
+        } else if (type === "text") {
+          handleDeleteText(id);
+        }
       },
       onCancel() {
         console.log("Deletion cancelled");
@@ -62,7 +78,7 @@ const Page = ({ params }) => {
     });
   };
 
-  const handleDelete = async (id) => {
+  const handleDeleteBlog = async (id) => {
     const hideLoadingMessage = message.loading({
       content: "Deleting layanan blog...",
       duration: 0,
@@ -83,7 +99,28 @@ const Page = ({ params }) => {
     }
   };
 
-  const columns = [
+  const handleDeleteText = async (id) => {
+    const hideLoadingMessage = message.loading({
+      content: "Deleting layanan text...",
+      duration: 0,
+    });
+
+    try {
+      await deleteLayanantext(id);
+      hideLoadingMessage();
+      message.success("Layanan text deleted successfully!");
+      const refreshedLayananText = await getLayananTextBasedOnCategoryId(
+        parseInt(slug)
+      );
+      setLayananText(refreshedLayananText);
+    } catch (err) {
+      hideLoadingMessage();
+      message.error("Failed to delete layanan text.");
+      console.error("Error while deleting layanan text:", err);
+    }
+  };
+
+  const blogColumns = [
     {
       title: "ID",
       dataIndex: "id",
@@ -110,7 +147,7 @@ const Page = ({ params }) => {
             </Button>
           </Link>
           <Button
-            onClick={() => showDeleteConfirm(record.id)}
+            onClick={() => showDeleteConfirm(record.id, "blog")}
             type="primary"
             danger
             icon={<DeleteOutlined />}
@@ -126,11 +163,52 @@ const Page = ({ params }) => {
     },
   ];
 
-  const dataSource = layananBlog.map((item) => ({
+  const textColumns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (record) => (
+        <div className="flex gap-2">
+          <Link href={`/admin/layanan/editText/${record.id}`}>
+            <Button type="primary" size="medium" icon={<EditOutlined />}>
+              Edit
+            </Button>
+          </Link>
+          <Button
+            onClick={() => showDeleteConfirm(record.id, "text")}
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            size="medium"
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const blogDataSource = layananBlog.map((item) => ({
     key: item.id,
     id: item.id,
     title: item.title,
     sinopsis: item.sinopsis,
+  }));
+
+  const textDataSource = layananText.map((item) => ({
+    key: item.id,
+    id: item.id,
+    title: item.title,
   }));
 
   return (
@@ -143,17 +221,41 @@ const Page = ({ params }) => {
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3">Layanan Blog {name}</h1>
-      <Link href={`/admin/layanan/category/${slug}/newBlog`}>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          size="large"
-          className="mb-4"
-        >
-          Create New Layanan Blog
-        </Button>
-      </Link>
-      <Table columns={columns} dataSource={dataSource} pagination={false} />
+      <div className="flex gap-2">
+        <Link href={`/admin/layanan/category/${slug}/newBlog`}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            size="large"
+            className="mb-4"
+          >
+            Create New Layanan Blog
+          </Button>
+        </Link>
+        <Link href={`/admin/layanan/category/${slug}/newText`}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            size="large"
+            className="mb-4"
+          >
+            Create New Layanan Text
+          </Button>
+        </Link>
+      </div>
+      <h1 className="text-2xl my-2">Texts</h1>
+      <Table
+        columns={textColumns}
+        dataSource={textDataSource}
+        pagination={false}
+      />
+
+      <h1 className="text-2xl my-2">Blogs</h1>
+      <Table
+        columns={blogColumns}
+        dataSource={blogDataSource}
+        pagination={false}
+      />
     </div>
   );
 };

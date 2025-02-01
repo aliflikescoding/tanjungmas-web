@@ -208,7 +208,7 @@ export const getFasiliitasBasedOnId = async (id) => {
         };
       }
     );
-  
+
     return {
       ...response.data,
       fasilitasImages: updatedFasilitasImages,
@@ -225,7 +225,7 @@ export const getSarana = async () => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 export const getPrasarana = async () => {
   try {
@@ -268,10 +268,8 @@ export const getLayananCategory = async () => {
   try {
     const response = await api.get("/layanan/category");
     return response.data;
-  } catch (err) {
-    
-  }
-}
+  } catch (err) {}
+};
 
 export const getLayananCategoryBasedOnId = async (id) => {
   try {
@@ -284,9 +282,7 @@ export const getLayananCategoryBasedOnId = async (id) => {
 
 export const getLayananBlogPreviewBasedOnCategoryId = async (id) => {
   try {
-    const response = await api.get(
-      `/layanan/category/${id}/blog/preview`
-    );
+    const response = await api.get(`/layanan/category/${id}/blog/preview`);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -298,21 +294,17 @@ export const getLayananBlogBasedOnId = async (id) => {
     const response = await api.get(`/layanan/blog/${id}`);
 
     // Replace /public with http://localhost:5000/public in fasilitasImages
-    const updatedImages = response.data.images.map(
-      (image) => {
-        return {
-          ...image,
-          img: image.img.replace(/^\/public/, "http://localhost:5000"),
-        };
-      }
-    );
-    
+    const updatedImages = response.data.images.map((image) => {
+      return {
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      };
+    });
+
     const updatedResponse = {
       ...response.data,
       images: updatedImages,
     };
-
-    console.log(updatedResponse);
 
     return updatedResponse;
   } catch (err) {
@@ -320,3 +312,126 @@ export const getLayananBlogBasedOnId = async (id) => {
   }
 };
 
+export const getLayananText = async () => {
+  try {
+    const response = await api.get(`/layanan/text`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getLayananTextBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/text/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export const getLayananTextBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/category/${id}/text/preview`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// info category
+// Get All Info Categories
+export const getInfoCategory = async () => {
+  try {
+    const response = await api.get("/info/category");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Get Info Category by ID
+export const getInfoCategoryBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/info/category/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// info blog
+// Get Info Blog by ID
+export const getInfoBlogBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/info/blog/${id}`);
+
+    // Replace /public with http://localhost:5000/public in infoBlogImages
+    const updatedImages = response.data.images.map((image) => {
+      return {
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      };
+    });
+
+    const updatedResponse = {
+      ...response.data,
+      images: updatedImages,
+    };
+
+    return updatedResponse;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Get Info Blog Preview
+export const getInfoBlogPreview = async () => {
+  try {
+    const response = await api.get("/info/blog/preview");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Get Info Blog Preview by Category ID
+export const getInfoBlogPreviewBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(`/info/category/${id}/blog/preview`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// info text
+// Get All Info Texts
+export const getInfoText = async () => {
+  try {
+    const response = await api.get("/info/text");
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Get Info Text by ID
+export const getInfoTextBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/info/text/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Get Info Text Preview by Category ID
+export const getInfoTextPreviewBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(`/info/category/${id}/text/preview`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
