@@ -208,7 +208,7 @@ export const getFasiliitasBasedOnId = async (id) => {
         };
       }
     );
-  
+
     return {
       ...response.data,
       fasilitasImages: updatedFasilitasImages,
@@ -225,7 +225,7 @@ export const getSarana = async () => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 export const getPrasarana = async () => {
   try {
@@ -268,10 +268,8 @@ export const getLayananCategory = async () => {
   try {
     const response = await api.get("/layanan/category");
     return response.data;
-  } catch (err) {
-    
-  }
-}
+  } catch (err) {}
+};
 
 export const getLayananCategoryBasedOnId = async (id) => {
   try {
@@ -284,9 +282,7 @@ export const getLayananCategoryBasedOnId = async (id) => {
 
 export const getLayananBlogPreviewBasedOnCategoryId = async (id) => {
   try {
-    const response = await api.get(
-      `/layanan/category/${id}/blog/preview`
-    );
+    const response = await api.get(`/layanan/category/${id}/blog/preview`);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -298,15 +294,13 @@ export const getLayananBlogBasedOnId = async (id) => {
     const response = await api.get(`/layanan/blog/${id}`);
 
     // Replace /public with http://localhost:5000/public in fasilitasImages
-    const updatedImages = response.data.images.map(
-      (image) => {
-        return {
-          ...image,
-          img: image.img.replace(/^\/public/, "http://localhost:5000"),
-        };
-      }
-    );
-    
+    const updatedImages = response.data.images.map((image) => {
+      return {
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      };
+    });
+
     const updatedResponse = {
       ...response.data,
       images: updatedImages,
@@ -320,3 +314,20 @@ export const getLayananBlogBasedOnId = async (id) => {
   }
 };
 
+export const getLayananText = async () => {
+  try {
+    const response = await api.get(`/layanan/text`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getLayananTextBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/category/${id}/text/preview`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};

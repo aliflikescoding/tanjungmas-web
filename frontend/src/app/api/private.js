@@ -449,3 +449,13 @@ export const deleteLayananBlog = async (id) => {
     throw new Error(err);
   }
 };
+
+// layanan text
+export const deleteLayanantext = async (id) => {
+  try {
+    const response = await api.delete(`/layanan/text/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
