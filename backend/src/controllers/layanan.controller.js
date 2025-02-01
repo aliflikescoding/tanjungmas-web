@@ -182,6 +182,31 @@ const getLayananText = async (req, res) => {
   }
 };
 
+const getlayananTextBasedOnId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await prisma.layananText.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!response) {
+      return res.status(404).json({
+        message: "Layanan text not found",
+      });
+    }
+
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error fetching layanan text",
+      error: err.message,
+    });
+  }
+};
 
 const postLayananText = async (req, res) => {
   try {
@@ -517,4 +542,5 @@ module.exports = {
   getLayananBlogBasedOnId,
   getLayananBlogByCategoryPreview,
   getLayananTextBasedOnCategoryPreview,
+  getlayananTextBasedOnId,
 };
