@@ -6,6 +6,8 @@ import "react-quill-new/dist/quill.snow.css"; // Styles for the editor
 import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
 import { postLayananText } from "@/app/api/private"; // Import the postLayananText function
+import Link from "next/link";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const Page = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
@@ -39,6 +41,13 @@ const Page = ({ params: paramsPromise }) => {
 
   return (
     <div>
+      <Link
+        href={`/admin/layanan/category/${slug}`}
+        className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
+      >
+        <ArrowLeftOutlined className="text-2xl" />{" "}
+        <p className="text-lg">Go Back</p>
+      </Link>
       <h1 className="text-4xl font-medium mb-3">Create New Layanan Blog</h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
