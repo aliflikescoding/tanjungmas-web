@@ -500,3 +500,130 @@ export const updateLayananText = async (title, content, id) => {
     throw new Error(err.response?.data?.message || "Failed to update blog"); // Handle errors
   }
 };
+
+// info category
+// Create Info Category
+export const createInfoCategory = async (title) => {
+  try {
+    const response = await api.post("/info/category", { title });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create info category:", err);
+    throw err;
+  }
+};
+
+// Delete Info Category
+export const deleteInfoCategory = async (id) => {
+  try {
+    const response = await api.delete(`/info/category/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Update Info Category
+export const updateInfoCategory = async (title, id) => {
+  try {
+    const response = await api.put(`/info/category/${id}`, { title });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update info category:", err);
+    throw err;
+  }
+};
+
+// info blog
+// Create Info Blog
+export const createInfoBlog = async (formData) => {
+  try {
+    const response = await api.post(`/info/blog`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Update Info Blog
+export const updateInfoBlog = async (id, formData) => {
+  try {
+    const response = await api.put(`/info/blog/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (err) {
+    console.error("Error updating info blog:", err.response?.data || err.message);
+    throw err;
+  }
+};
+
+// Delete Info Blog
+export const deleteInfoBlog = async (id) => {
+  try {
+    const response = await api.delete(`/info/blog/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// info text
+// Create Info Text
+export const postInfoText = async (title, content, categoryId) => {
+  try {
+    const response = await api.post(
+      `/info/text`,
+      {
+        title,
+        content,
+        categoryId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || "Failed to create info text");
+  }
+};
+
+// Update Info Text
+export const updateInfoText = async (title, content, id) => {
+  try {
+    const response = await api.put(
+      `/info/text/${id}`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || "Failed to update info text");
+  }
+};
+
+// Delete Info Text
+export const deleteInfoText = async (id) => {
+  try {
+    const response = await api.delete(`/info/text/${id}`);
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
