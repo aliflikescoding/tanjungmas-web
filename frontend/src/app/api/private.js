@@ -459,3 +459,24 @@ export const deleteLayanantext = async (id) => {
     throw new Error(err);
   }
 }
+
+export const postLayananText = async (title, content, categoryId) => {
+  try {
+    const response = await api.post(
+      `/layanan/text`,
+      {
+        title,
+        content,
+        categoryId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json", // Use JSON for sending plain text data
+        },
+      }
+    );
+    return response.data; // Return the response data
+  } catch (err) {
+    throw new Error(err.response?.data?.message || "Failed to create blog"); // Handle errors
+  }
+};
