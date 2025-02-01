@@ -19,6 +19,8 @@ const {
   getLayananBlogPreview,
   getLayananBlogBasedOnId,
   getLayananBlogByCategoryPreview,
+  getLayananTextBasedOnCategoryPreview,
+  getlayananTextBasedOnId,
 } = require("../controllers/layanan.controller");
 const verifyJWT = require("../middlewares/verifyJWT");
 
@@ -33,7 +35,12 @@ router.delete("/layanan/category/:id", verifyJWT, deleteLayananCategory);
 
 // layanan text
 router.get("/layanan/category/:id/text", getLayananTextBasedOnCategory);
+router.get(
+  "/layanan/category/:id/text/preview",
+  getLayananTextBasedOnCategoryPreview
+);
 router.get("/layanan/text", getLayananText);
+router.get("/layanan/text/:id", getlayananTextBasedOnId);
 router.post("/layanan/text", verifyJWT, postLayananText);
 router.put("/layanan/text/:id", verifyJWT, updateLayananText);
 router.delete("/layanan/text/:id", verifyJWT, deleteLayananText);
