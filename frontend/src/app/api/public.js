@@ -306,8 +306,6 @@ export const getLayananBlogBasedOnId = async (id) => {
       images: updatedImages,
     };
 
-    console.log(updatedResponse);
-
     return updatedResponse;
   } catch (err) {
     throw new Error(err);
@@ -322,6 +320,15 @@ export const getLayananText = async () => {
     throw new Error(err);
   }
 };
+
+export const getLayananTextBasedOnId = async (id) => {
+  try {
+    const response = await api.get(`/layanan/text/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
 export const getLayananTextBasedOnCategoryId = async (id) => {
   try {

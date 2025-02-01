@@ -480,3 +480,23 @@ export const postLayananText = async (title, content, categoryId) => {
     throw new Error(err.response?.data?.message || "Failed to create blog"); // Handle errors
   }
 };
+
+export const updateLayananText = async (title, content, id) => {
+  try {
+    const response = await api.put(
+      `/layanan/text/${id}`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json", // Use JSON for sending plain text data
+        },
+      }
+    );
+    return response.data; // Return the response data
+  } catch (err) {
+    throw new Error(err.response?.data?.message || "Failed to update blog"); // Handle errors
+  }
+};
