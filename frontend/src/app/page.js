@@ -8,7 +8,7 @@ export default function Home() {
     <CustomLayout>
       <Hero />
       <InfoHeroImages />
-      <Berita limitedView={true}/>
+      <Berita/>
     </CustomLayout>
   );
 }

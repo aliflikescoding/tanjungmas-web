@@ -2,47 +2,112 @@
 
 import React, { useState, useEffect } from "react";
 import CustomContainer from "@/components/custom/CustomContainer";
-import { getBeritaPreview } from "@/app/api/public";
+import {
+  getBeritaPreview,
+  getBeritaCategories,
+  getBeritaPreviewByCategory,
+} from "@/app/api/public";
 import BlogCard from "@/components/ui/BlogCard.js";
 import Link from "next/link.js";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Select } from "antd";
 
 const Berita = ({ limitedView = false }) => {
   const [featuredNews, setFeaturedNews] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     const fetchBerita = async () => {
       try {
         const berita = await getBeritaPreview();
-        console.log(berita);
         setFeaturedNews(berita);
       } catch (error) {
         console.error("Failed to fetch berita preview:", error);
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const categories = await getBeritaCategories();
+        setCategories(categories);
+      } catch (error) {
+        console.error("Failed to fetch berita categories:", error);
+      }
+    };
+
     fetchBerita();
+    fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const fetchBeritaByCategory = async () => {
+      if (selectedCategory) {
+        try {
+          const berita = await getBeritaPreviewByCategory(selectedCategory);
+          setFeaturedNews(berita);
+        } catch (error) {
+          console.error("Failed to fetch berita by category:", error);
+        }
+      } else {
+        const fetchBerita = async () => {
+          try {
+            const berita = await getBeritaPreview();
+            setFeaturedNews(berita);
+          } catch (error) {
+            console.error("Failed to fetch berita preview:", error);
+          }
+        };
+
+        fetchBerita();
+      }
+    };
+
+    fetchBeritaByCategory();
+  }, [selectedCategory]);
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+  };
 
   return (
     <div className="py-20">
       <CustomContainer>
         <h2 className="title2">Berita</h2>
         <h1 className="title1">Berita Terkini</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
-          {(limitedView ? featuredNews.slice(0, 3) : featuredNews).map(
-            (berita) => (
-              <BlogCard
-                key={berita.id}
-                title={berita.title}
-                thumbnailSrc={berita.images[0].img}
-                previewText={berita.sinopsis}
-                link={berita.link}
-              />
-            )
-          )}
+        <div className="mt-4">
+          <Select
+            placeholder="Pilih Kategori"
+            style={{ width: 200, marginBottom: 20 }}
+            onChange={handleCategoryChange}
+            options={categories.map((category) => ({
+              label: category.title,
+              value: category.id,
+            }))}
+          />
         </div>
-        {limitedView && (
+
+        {featuredNews.length === 0 ? (
+          <p className="text-center text-gray-500 text-lg font-semibold my-10">
+            Tidak ada berita
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+            {(limitedView ? featuredNews.slice(0, 3) : featuredNews).map(
+              (berita) => (
+                <BlogCard
+                  key={berita.id}
+                  title={berita.title}
+                  thumbnailSrc={berita.images?.[0]?.img || "/default-image.jpg"} // Provide a default image if undefined
+                  previewText={berita.sinopsis}
+                  link={berita.link}
+                />
+              )
+            )}
+          </div>
+        )}
+
+        {limitedView && featuredNews.length > 0 && (
           <Link
             className="text-2xl font-normal text-primary mt-auto flex items-center group transition-all ease-in-out"
             href="/berita"

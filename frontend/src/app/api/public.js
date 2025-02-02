@@ -540,7 +540,17 @@ export const getBeritaByCategory = async (categoryId) => {
 export const getBeritaPreviewByCategory = async (categoryId) => {
   try {
     const response = await api.get(`/berita/category/${categoryId}/blog/preview`);
-    return response.data;
+
+    // Replace /public with http://localhost:5000 in images for each berita item
+    const updatedBeritaPreview = response.data.map((berita) => ({
+      ...berita,
+      images: berita.images.map((image) => ({
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      })),
+    }));
+
+    return updatedBeritaPreview;
   } catch (err) {
     console.error("Failed to fetch berita preview by category:", err);
     throw err;
