@@ -5,8 +5,8 @@ import ReactQuill from "react-quill-new"; // Updated import
 import "react-quill-new/dist/quill.snow.css"; // Updated import
 import { Form, Input, Button, Upload, Modal, message } from "antd";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
-import { getLayananCategoryBasedOnId } from "@/app/api/public";
-import { createLayananBlog } from "@/app/api/private";
+import { getInfoCategoryBasedOnId } from "@/app/api/public";
+import { createInfoBlog } from "@/app/api/private";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -28,9 +28,9 @@ const Page = ({ params: paramsPromise }) => {
   const router = useRouter(); // Use the useRouter hook at the top level
 
   useEffect(() => {
-    const fetchLayananName = async () => {
+    const fetchInfoName = async () => {
       try {
-        const response = await getLayananCategoryBasedOnId(parseInt(slug));
+        const response = await getInfoCategoryBasedOnId(parseInt(slug));
         if (response && response.title) {
           setName(response.title);
         } else {
@@ -43,7 +43,7 @@ const Page = ({ params: paramsPromise }) => {
       }
     };
 
-    fetchLayananName();
+    fetchInfoName();
   }, [slug]);
 
   // Handle image upload via modal
@@ -73,30 +73,30 @@ const Page = ({ params: paramsPromise }) => {
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const hideLoadingMessage = message.loading({
-      content: "Uploading big image...",
+      content: "Uploading info blog...",
       duration: 0,
     });
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("layananContent", content);
+    formData.append("infoBlogContent", content);
     formData.append("categoryId", parseInt(slug)); // Ensure categoryId is a number
     images.forEach((image) => {
       formData.append("images", image);
     });
 
     try {
-      await createLayananBlog(formData); // Ensure the request is awaited
+      await createInfoBlog(formData); // Ensure the request is awaited
       hideLoadingMessage();
       setIsLoading(false);
-      message.success("Page added successfully!");
+      message.success("Info blog added successfully!");
       setTimeout(() => {
-        router.push(`/admin/layanan/category/${slug}`); // Use the router instance
+        router.push(`/admin/info/category/${slug}`); // Use the router instance
       }, 1000);
     } catch (err) {
       hideLoadingMessage(); // Hide loading message
       setIsLoading(false);
-      message.error("Failed to update big image.");
+      message.error("Failed to create info blog.");
     }
   };
 
@@ -116,14 +116,14 @@ const Page = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/layanan/category/${slug}`}
+        href={`/admin/info/category/${slug}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
-        Create New Layanan for {name}
+        Create New Info Blog for {name}
       </h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">

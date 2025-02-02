@@ -5,13 +5,13 @@ import ReactQuill from "react-quill-new"; // Rich text editor
 import "react-quill-new/dist/quill.snow.css"; // Styles for the editor
 import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
-import { postLayananText } from "@/app/api/private"; // Import the postLayananText function
+import { postInfoText } from "@/app/api/private"; // Import the postInfoText function instead
 import Link from "next/link";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const Page = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
-  const { slug } = params; // Destructure slug from unwrapped params
+  const { slug } = params; // Keep using slug from unwrapped params
 
   const [form] = Form.useForm(); // Ant Design Form instance
   const [content, setContent] = useState("");
@@ -28,10 +28,10 @@ const Page = ({ params: paramsPromise }) => {
         return;
       }
 
-      // Call the postLayananText function
-      await postLayananText(values.title, content, parseInt(slug));
-      message.success("Blog created successfully!");
-      router.push(`/admin/layanan/category/${slug}`); // Redirect after success
+      // Call the postInfoText function instead of postLayananText
+      await postInfoText(values.title, content, parseInt(slug));
+      message.success("Info content created successfully!");
+      router.push(`/admin/info/category/${slug}`); // Update redirect path
     } catch (err) {
       message.error(err.message); // Show error message
     } finally {
@@ -42,13 +42,13 @@ const Page = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/layanan/category/${slug}`}
+        href={`/admin/info/category/${slug}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
-      <h1 className="text-4xl font-medium mb-3">Create New Layanan Blog</h1>
+      <h1 className="text-4xl font-medium mb-3">Create New Info Content</h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item

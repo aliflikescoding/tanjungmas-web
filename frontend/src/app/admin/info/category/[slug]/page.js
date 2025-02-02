@@ -2,11 +2,11 @@
 
 import { Button, Modal, Form, Input, message, Table } from "antd";
 import {
-  getLayananCategoryBasedOnId,
-  getLayananBlogPreviewBasedOnCategoryId,
-  getLayananTextBasedOnCategoryId,
+  getInfoCategoryBasedOnId,
+  getInfoBlogPreviewBasedOnCategoryId,
+  getInfoTextPreviewBasedOnCategoryId,
 } from "@/app/api/public";
-import { deleteLayananBlog, deleteLayanantext } from "@/app/api/private"; // Import the new function
+import { deleteInfoBlog, deleteInfoText } from "@/app/api/private"; // Import the new function
 import React, { useEffect, useState } from "react";
 import {
   PlusOutlined,
@@ -24,37 +24,39 @@ const Page = ({ params }) => {
   const { slug } = unwrappedParams;
 
   const [name, setName] = useState("");
-  const [layananBlog, setLayananBlog] = useState([]);
-  const [layananText, setLayananText] = useState([]);
+  const [infoBlog, setInfoBlog] = useState([]);
+  const [infoText, setInfoText] = useState([]);
 
   useEffect(() => {
-    const fetchLayananName = async () => {
-      const response = await getLayananCategoryBasedOnId(parseInt(slug));
+    const fetchInfoName = async () => {
+      const response = await getInfoCategoryBasedOnId(parseInt(slug));
       setName(response.title);
     };
 
-    fetchLayananName();
+    fetchInfoName();
   }, [slug]);
 
   useEffect(() => {
-    const fetchLayananBlog = async () => {
-      const response = await getLayananBlogPreviewBasedOnCategoryId(
+    const fetchInfoBlog = async () => {
+      const response = await getInfoBlogPreviewBasedOnCategoryId(
         parseInt(slug)
       );
-      setLayananBlog(response);
+      setInfoBlog(response);
     };
 
-    fetchLayananBlog();
+    fetchInfoBlog();
   }, [slug]);
 
   useEffect(() => {
-    const fetchLayananText = async () => {
-      const response = await getLayananTextBasedOnCategoryId(parseInt(slug));
+    const fetchInfoText = async () => {
+      const response = await getInfoTextPreviewBasedOnCategoryId(
+        parseInt(slug)
+      );
       console.log(response);
-      setLayananText(response);
+      setInfoText(response);
     };
 
-    fetchLayananText();
+    fetchInfoText();
   }, [slug]);
 
   const showDeleteConfirm = (id, type) => {
@@ -80,43 +82,43 @@ const Page = ({ params }) => {
 
   const handleDeleteBlog = async (id) => {
     const hideLoadingMessage = message.loading({
-      content: "Deleting layanan blog...",
+      content: "Deleting info blog...",
       duration: 0,
     });
 
     try {
-      await deleteLayananBlog(id);
+      await deleteInfoBlog(id);
       hideLoadingMessage();
-      message.success("Layanan blog deleted successfully!");
-      const refreshedLayananBlog = await getLayananBlogPreviewBasedOnCategoryId(
+      message.success("Info blog deleted successfully!");
+      const refreshedInfoBlog = await getInfoBlogPreviewBasedOnCategoryId(
         parseInt(slug)
       );
-      setLayananBlog(refreshedLayananBlog);
+      setInfoBlog(refreshedInfoBlog);
     } catch (err) {
       hideLoadingMessage();
-      message.error("Failed to delete layanan blog.");
-      console.error("Error while deleting layanan blog:", err);
+      message.error("Failed to delete info blog.");
+      console.error("Error while deleting info blog:", err);
     }
   };
 
   const handleDeleteText = async (id) => {
     const hideLoadingMessage = message.loading({
-      content: "Deleting layanan text...",
+      content: "Deleting info text...",
       duration: 0,
     });
 
     try {
-      await deleteLayanantext(id);
+      await deleteInfoText(id);
       hideLoadingMessage();
-      message.success("Layanan text deleted successfully!");
-      const refreshedLayananText = await getLayananTextBasedOnCategoryId(
+      message.success("Info text deleted successfully!");
+      const refreshedInfoText = await getInfoTextPreviewBasedOnCategoryId(
         parseInt(slug)
       );
-      setLayananText(refreshedLayananText);
+      setInfoText(refreshedInfoText);
     } catch (err) {
       hideLoadingMessage();
-      message.error("Failed to delete layanan text.");
-      console.error("Error while deleting layanan text:", err);
+      message.error("Failed to delete info text.");
+      console.error("Error while deleting info text:", err);
     }
   };
 
@@ -141,7 +143,7 @@ const Page = ({ params }) => {
       key: "action",
       render: (record) => (
         <div className="flex gap-2">
-          <Link href={`/admin/layanan/editBlog/${record.id}`}>
+          <Link href={`/admin/info/editBlog/${record.id}`}>
             <Button type="primary" size="medium" icon={<EditOutlined />}>
               Edit
             </Button>
@@ -155,8 +157,8 @@ const Page = ({ params }) => {
           >
             Delete
           </Button>
-          <Link target="_" href={`/layanan-blog/${record.id}`}>
-            <Button size="medium">See Layanan Blog</Button>
+          <Link target="_" href={`/info-blog/${record.id}`}>
+            <Button size="medium">See Info Blog</Button>
           </Link>
         </div>
       ),
@@ -179,7 +181,7 @@ const Page = ({ params }) => {
       key: "action",
       render: (record) => (
         <div className="flex gap-2">
-          <Link href={`/admin/layanan/editText/${record.id}`}>
+          <Link href={`/admin/info/editText/${record.id}`}>
             <Button type="primary" size="medium" icon={<EditOutlined />}>
               Edit
             </Button>
@@ -198,14 +200,14 @@ const Page = ({ params }) => {
     },
   ];
 
-  const blogDataSource = layananBlog.map((item) => ({
+  const blogDataSource = infoBlog.map((item) => ({
     key: item.id,
     id: item.id,
     title: item.title,
     sinopsis: item.sinopsis,
   }));
 
-  const textDataSource = layananText.map((item) => ({
+  const textDataSource = infoText.map((item) => ({
     key: item.id,
     id: item.id,
     title: item.title,
@@ -214,32 +216,32 @@ const Page = ({ params }) => {
   return (
     <div>
       <Link
-        href={`/admin/layanan`}
+        href={`/admin/info`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
-      <h1 className="text-4xl font-medium mb-3">Layanan Blog {name}</h1>
+      <h1 className="text-4xl font-medium mb-3">Info Blog {name}</h1>
       <div className="flex gap-2">
-        <Link href={`/admin/layanan/category/${slug}/newBlog`}>
+        <Link href={`/admin/info/category/${slug}/newBlog`}>
           <Button
             type="primary"
             icon={<PlusOutlined />}
             size="large"
             className="mb-4"
           >
-            Create New Layanan Blog
+            Create New Info Blog
           </Button>
         </Link>
-        <Link href={`/admin/layanan/category/${slug}/newText`}>
+        <Link href={`/admin/info/category/${slug}/newText`}>
           <Button
             type="primary"
             icon={<PlusOutlined />}
             size="large"
             className="mb-4"
           >
-            Create New Layanan Text
+            Create New Info Text
           </Button>
         </Link>
       </div>
