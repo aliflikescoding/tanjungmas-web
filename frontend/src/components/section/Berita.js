@@ -70,22 +70,27 @@ const Berita = ({ limitedView = false }) => {
     setSelectedCategory(value);
   };
 
+  console.log("limitedView:", limitedView); // Debugging
+  console.log("featuredNews:", featuredNews); // Debugging
+
   return (
     <div className="py-20">
       <CustomContainer>
         <h2 className="title2">Berita</h2>
         <h1 className="title1">Berita Terkini</h1>
-        <div className="mt-4">
-          <Select
-            placeholder="Pilih Kategori"
-            style={{ width: 200, marginBottom: 20 }}
-            onChange={handleCategoryChange}
-            options={categories.map((category) => ({
-              label: category.title,
-              value: category.id,
-            }))}
-          />
-        </div>
+        {!limitedView && (
+          <div className="mt-4">
+            <Select
+              placeholder="Pilih Kategori"
+              style={{ width: 200, marginBottom: 20 }}
+              onChange={handleCategoryChange}
+              options={categories.map((category) => ({
+                label: category.title,
+                value: category.id,
+              }))}
+            />
+          </div>
+        )}
 
         {featuredNews.length === 0 ? (
           <p className="text-center text-gray-500 text-lg font-semibold my-10">
@@ -98,9 +103,9 @@ const Berita = ({ limitedView = false }) => {
                 <BlogCard
                   key={berita.id}
                   title={berita.title}
-                  thumbnailSrc={berita.images?.[0]?.img || "/default-image.jpg"} // Provide a default image if undefined
+                  thumbnailSrc={berita.images?.[0]?.img || "/default-image.jpg"}
                   previewText={berita.sinopsis}
-                  link={berita.link}
+                  link={`/berita/${berita.id}`}
                 />
               )
             )}

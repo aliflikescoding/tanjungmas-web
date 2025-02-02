@@ -171,16 +171,19 @@ export const getFasilitasCategory = async () => {
     const response = await api.get("/tentang/fasilitas-category");
     return response.data;
   } catch (err) {
-    throw new Error(err);
+    console.error("Failed to fetch fasilitas categories:", err);
+    throw err;
   }
 };
+
 
 export const getFasilitasCategoryBasedOnId = async (id) => {
   try {
     const response = await api.get(`/tentang/fasilitas-category/${id}`);
     return response.data;
   } catch (err) {
-    throw new Error(err);
+    console.error("Failed to fetch fasilitas category:", err);
+    throw err;
   }
 };
 
@@ -189,34 +192,61 @@ export const getFasilitasPreviewBasedOnCategoryId = async (id) => {
     const response = await api.get(
       `/tentang/fasilitas-category/${id}/fasilitas/preview`
     );
-    return response.data;
+
+    // Replace /public with http://localhost:5000 in images for each fasilitas item
+    const updatedFasilitasPreview = response.data.map((fasilitas) => {
+      if (
+        fasilitas.fasilitasImages &&
+        Array.isArray(fasilitas.fasilitasImages)
+      ) {
+        return {
+          ...fasilitas,
+          fasilitasImages: fasilitas.fasilitasImages.map((image) => ({
+            ...image,
+            img: image.img.replace(/^\/public/, "http://localhost:5000"),
+          })),
+        };
+      }
+      return fasilitas;
+    });
+
+    console.log(
+      "Updated Fasilitas Preview by Category ID:",
+      updatedFasilitasPreview
+    );
+    return updatedFasilitasPreview;
   } catch (err) {
-    throw new Error(err);
+    console.error("Failed to fetch fasilitas preview by category:", err);
+    throw err;
   }
 };
 
-export const getFasiliitasBasedOnId = async (id) => {
+
+export const getFasilitasBasedOnId = async (id) => {
   try {
     const response = await api.get(`/tentang/fasilitas/${id}`);
 
-    // Replace /public with http://localhost:5000/public in fasilitasImages
+    // Replace /public with http://localhost:5000 in fasilitasImages
     const updatedFasilitasImages = response.data.fasilitasImages.map(
-      (image) => {
-        return {
-          ...image,
-          img: image.img.replace(/^\/public/, "http://localhost:5000"),
-        };
-      }
+      (image) => ({
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      })
     );
 
-    return {
+    const updatedResponse = {
       ...response.data,
       fasilitasImages: updatedFasilitasImages,
     };
+
+    console.log("Updated Fasilitas by ID:", updatedResponse);
+    return updatedResponse;
   } catch (err) {
-    throw new Error(err);
+    console.error("Failed to fetch fasilitas by ID:", err);
+    throw err;
   }
 };
+
 
 export const getSarana = async () => {
   try {
@@ -553,6 +583,39 @@ export const getBeritaPreviewByCategory = async (categoryId) => {
     return updatedBeritaPreview;
   } catch (err) {
     console.error("Failed to fetch berita preview by category:", err);
+    throw err;
+  }
+};
+
+// Fetch berita preview
+export const getFasilitasPreview = async () => {
+  try {
+    const response = await api.get("/tentang/fasilitas/preview");
+
+    // Replace /public with http://localhost:5000 in images for each fasilitas item
+    const updatedFasilitasPreview = response.data.map((fasilitas) => {
+      // Check if fasilitasImages exists and is an array
+      if (
+        fasilitas.fasilitasImages &&
+        Array.isArray(fasilitas.fasilitasImages)
+      ) {
+        return {
+          ...fasilitas,
+          fasilitasImages: fasilitas.fasilitasImages.map((image) => ({
+            ...image,
+            img: image.img.replace(/^\/public/, "http://localhost:5000"),
+          })),
+        };
+      }
+      // If fasilitasImages is not an array, return the original fasilitas object
+      return fasilitas;
+    });
+
+    console.log(updatedFasilitasPreview);
+
+    return updatedFasilitasPreview;
+  } catch (err) {
+    console.error("Failed to fetch fasilitas preview:", err);
     throw err;
   }
 };
