@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 .title1 {
-  @apply text-5xl font-medium tracking-wider text-black;
+  @apply text-3xl sm:text-5xl font-medium tracking-wider text-black;
 }
 
 .title2 {
-  @apply text-3xl font-medium tracking-wider text-red-500 uppercase;
+  @apply text-xl sm:text-3xl font-medium tracking-wider text-red-500 uppercase;
 }

@@ -38,11 +38,11 @@ const InfoHeroImages = () => {
             >
               <Image
                 src={image.image}
-                width={500}
-                height={500}
+                height={0}
+                width={0}
+                sizes="100vw"
                 alt="info image"
-                views="100vw"
-                className="h-[500px] w-full"
+                className="h-auto sm:h-[500px] w-full"
               />
             </div>
           ))}

@@ -473,7 +473,17 @@ export const getAllBerita = async () => {
 export const getBeritaPreview = async () => {
   try {
     const response = await api.get("/berita/preview");
-    return response.data;
+
+    // Replace /public with http://localhost:5000 in images for each berita item
+    const updatedBeritaPreview = response.data.map((berita) => ({
+      ...berita,
+      images: berita.images.map((image) => ({
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      })),
+    }));
+
+    return updatedBeritaPreview;
   } catch (err) {
     console.error("Failed to fetch berita preview:", err);
     throw err;
