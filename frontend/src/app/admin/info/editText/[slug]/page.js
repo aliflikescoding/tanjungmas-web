@@ -1,33 +1,33 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill-new"; // Rich text editor
-import "react-quill-new/dist/quill.snow.css"; // Styles for the editor
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
-import { getLayananTextBasedOnId } from "@/app/api/public"; // Fetch existing data
-import { updateLayananText } from "@/app/api/private"; // Update function
+import { getInfoTextBasedOnId } from "@/app/api/public"; // Changed to info API
+import { updateInfoText } from "@/app/api/private"; // Changed to info API
 import Link from "next/link";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const Page = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
-  const { slug } = params; // Destructure slug (textId) from params
+  const { slug } = params;
 
-  const [form] = Form.useForm(); // Ant Design Form instance
+  const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter(); // Use the useRouter hook at the top level
+  const router = useRouter();
   const [categoryId, setCategoryId] = useState(null);
 
   // Fetch existing data based on ID
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getLayananTextBasedOnId(slug); // Use slug as the text ID
+        const response = await getInfoTextBasedOnId(slug);
         if (response) {
-          form.setFieldsValue({ title: response.title }); // Set title in the form
-          setContent(response.content); // Set content in the ReactQuill editor
+          form.setFieldsValue({ title: response.title });
+          setContent(response.content);
           setCategoryId(response.categoryId);
         }
       } catch (err) {
@@ -42,34 +42,32 @@ const Page = ({ params: paramsPromise }) => {
   const handleSubmit = async (values) => {
     setIsLoading(true);
     try {
-      // Validate content manually
       if (!content || content.trim() === "") {
         message.error("Please input the content!");
         return;
       }
-      
 
-      // Call the updateLayananText function
-      const response = await updateLayananText(values.title, content, slug); // Use slug as the text ID
-      message.success("Blog updated successfully!");
-      router.push(`/admin/layanan/category/${categoryId}`); // Redirect to the main admin page after success
+      // Call the updateInfoText function
+      await updateInfoText(values.title, content, slug);
+      message.success("Info content updated successfully!");
+      router.push(`/admin/info/category/${categoryId}`);
     } catch (err) {
-      message.error(err.message); // Show error message
+      message.error(err.message);
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
       <Link
-        href={`/admin/layanan/category/${categoryId}`}
+        href={`/admin/info/category/${categoryId}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
-      <h1 className="text-4xl font-medium mb-3">Edit Layanan Blog</h1>
+      <h1 className="text-4xl font-medium mb-3">Edit Info Content</h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
@@ -88,10 +86,10 @@ const Page = ({ params: paramsPromise }) => {
               <ReactQuill
                 value={content}
                 onChange={(value) => {
-                  setContent(value); // Update content state
-                  form.setFieldsValue({ content: value }); // Update form value
+                  setContent(value);
+                  form.setFieldsValue({ content: value });
                 }}
-                theme="snow" // Use the snow theme for the editor
+                theme="snow"
               />
             </div>
           </Form.Item>

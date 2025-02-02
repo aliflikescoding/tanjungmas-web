@@ -1,49 +1,49 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill-new"; // Updated import
-import "react-quill-new/dist/quill.snow.css"; // Updated import
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { Form, Input, Button, Upload, Modal, message } from "antd";
 import {
   UploadOutlined,
   InboxOutlined,
   DeleteOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
-import { updateLayananBlog } from "@/app/api/private";
-import { getLayananBlogBasedOnId } from "@/app/api/public";
+import { updateInfoBlog } from "@/app/api/private";
+import { getInfoBlogBasedOnId } from "@/app/api/public";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Dragger } = Upload;
 
-const EditLayananBlog = ({ params: paramsPromise }) => {
+const EditInfoBlog = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
   const { slug } = params;
 
-  const [layananBlog, setLayananBlog] = useState(null);
+  const [infoBlog, setInfoBlog] = useState(null);
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
-  const [existingImages, setExistingImages] = useState([]); // Existing images from the API
-  const [newImages, setNewImages] = useState([]); // New images to be uploaded
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchLayananBlog = async () => {
-      const response = await getLayananBlogBasedOnId(parseInt(slug));
-      setLayananBlog(response);
+    const fetchInfoBlog = async () => {
+      const response = await getInfoBlogBasedOnId(parseInt(slug));
+      setInfoBlog(response);
       form.setFieldsValue({
         title: response.title,
         sinopsis: response.sinopsis,
       });
-      setContent(response.layananContent);
-      setExistingImages(response.images || []); // Set existing images
+      setContent(response.infoBlogContent);
+      setExistingImages(response.images || []);
     };
 
-    fetchLayananBlog();
+    fetchInfoBlog();
   }, [slug, form]);
 
   const handleImageUpload = (files) => {
@@ -52,9 +52,9 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
 
   const handleModalOk = () => {
     if (filesToUpload.length > 0) {
-      setNewImages([...newImages, ...filesToUpload]); // Add new files to the newImages list
-      setFilesToUpload([]); // Clear the files to upload
-      setIsModalOpen(false); // Close the modal
+      setNewImages([...newImages, ...filesToUpload]);
+      setFilesToUpload([]);
+      setIsModalOpen(false);
       message.success("Files added successfully!");
     } else {
       message.error("No files selected!");
@@ -63,63 +63,61 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
 
   const handleModalCancel = () => {
     setIsModalOpen(false);
-    setFilesToUpload([]); // Clear the files to upload
+    setFilesToUpload([]);
   };
 
   const handleRemoveExistingImage = (imageId) => {
-    setExistingImages((prev) => prev.filter((img) => img.id !== imageId)); // Remove the image from the existing images list
+    setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
     message.success("Image removed successfully!");
   };
 
   const handleRemoveNewImage = (fileIndex) => {
-    setNewImages((prev) => prev.filter((_, index) => index !== fileIndex)); // Remove the image from the new images list
+    setNewImages((prev) => prev.filter((_, index) => index !== fileIndex));
     message.success("Image removed successfully!");
   };
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const hideLoadingMessage = message.loading({
-      content: "Updating layanan blog...",
+      content: "Updating info blog...",
       duration: 0,
     });
 
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("layananContent", content);
-    formData.append("categoryId", layananBlog.categoryId); // Ensure categoryId is a number
+    formData.append("infoBlogContent", content);
+    formData.append("categoryId", infoBlog.categoryId);
 
-    // Append existing image IDs (for tracking deletions)
     existingImages.forEach((image) => {
       formData.append("existingImageIds", image.id);
     });
 
-    // Append new images
     newImages.forEach((image) => {
       formData.append("images", image);
     });
 
     try {
-      await updateLayananBlog(parseInt(slug), formData); // Call the update API
+      await updateInfoBlog(parseInt(slug), formData);
       hideLoadingMessage();
       setIsLoading(false);
-      message.success("Layanan blog updated successfully!");
+      message.success("Info blog updated successfully!");
       setTimeout(() => {
-        router.push(`/admin/layanan/category/${layananBlog.categoryId}`); // Redirect after success
+        router.push(`/admin/info/category/${infoBlog.categoryId}`);
       }, 1000);
     } catch (err) {
       hideLoadingMessage();
       setIsLoading(false);
-      message.error("Failed to update layanan blog.");
+      message.error("Failed to update info blog.");
     }
   };
 
   const uploadProps = {
     name: "file",
-    multiple: true, // Allow multiple files
+    multiple: true,
     beforeUpload(file, fileList) {
-      handleImageUpload(fileList); // Handle file selection
-      return false; // Prevent automatic upload
+      handleImageUpload(fileList);
+      return false;
     },
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
@@ -129,14 +127,14 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/layanan/category/${layananBlog?.categoryId}`}
+        href={`/admin/info/category/${infoBlog?.categoryId}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
-        Edit {layananBlog?.title}
+        Edit {infoBlog?.title}
       </h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
@@ -168,7 +166,6 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
               Add Images
             </Button>
             <div className="mt-2">
-              {/* Display existing images */}
               {existingImages.map((image) => (
                 <div key={image.id} className="inline-block mr-2 relative">
                   <img
@@ -185,7 +182,6 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
                   />
                 </div>
               ))}
-              {/* Display new images */}
               {newImages.map((image, index) => (
                 <div key={index} className="inline-block mr-2 relative">
                   <img
@@ -219,7 +215,6 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
         </Form>
       </div>
 
-      {/* Modal for uploading images */}
       <Modal
         title="Upload Images"
         open={isModalOpen}
@@ -242,4 +237,4 @@ const EditLayananBlog = ({ params: paramsPromise }) => {
   );
 };
 
-export default EditLayananBlog;
+export default EditInfoBlog;
