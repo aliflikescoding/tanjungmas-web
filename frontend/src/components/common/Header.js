@@ -3,8 +3,8 @@ import CustomContainer from "../custom/CustomContainer.js";
 import Image from "next/image";
 import Link from "next/link";
 import StickyWrapper from "../custom/StickyComponent.js";
-import HeaderImages from "../landing/HeaderImages.js";
-import MobileNavLinks from "../landing/MobileNavLinks.js";
+import HeaderImages from "../commonComponents/HeaderImages.js";
+import MobileNavLinks from "../commonComponents/MobileNavLinks.js";
 
 export default async function Header() {
 
