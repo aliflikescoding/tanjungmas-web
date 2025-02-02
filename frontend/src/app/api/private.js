@@ -627,3 +627,79 @@ export const deleteInfoText = async (id) => {
     throw new Error(err);
   }
 };
+
+// Berita Category
+// Create Berita Category
+export const createBeritaCategory = async (title) => {
+  try {
+    const response = await api.post("/berita/category", { title });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create berita category:", err);
+    throw err;
+  }
+};
+
+// Update Berita Category
+export const updateBeritaCategory = async (id, title) => {
+  try {
+    const response = await api.put(`/berita/category/${id}`, { title });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update berita category:", err);
+    throw err;
+  }
+};
+
+// Delete Berita Category
+export const deleteBeritaCategory = async (id) => {
+  try {
+    const response = await api.delete(`/berita/category/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to delete berita category:", err);
+    throw err;
+  }
+};
+
+// Berita Blog
+// Create Berita Blog
+export const createBeritaBlog = async (formData) => {
+  try {
+    const response = await api.post("/berita", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create berita blog:", err);
+    throw err;
+  }
+};
+
+// Update Berita Blog
+export const updateBeritaBlog = async (id, formData) => {
+  try {
+    const response = await api.put(`/berita/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Failed to update berita blog:", err);
+    throw err;
+  }
+};
+
+// Delete Berita Blog
+export const deleteBeritaBlog = async (id) => {
+  try {
+    const response = await api.delete(`/berita/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to delete berita blog:", err);
+    throw err;
+  }
+};

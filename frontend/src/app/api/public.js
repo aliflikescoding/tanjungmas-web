@@ -435,3 +435,80 @@ export const getInfoTextPreviewBasedOnCategoryId = async (id) => {
     throw new Error(err);
   }
 };
+
+// Fetch all berita categories
+export const getBeritaCategories = async () => {
+  try {
+    const response = await api.get("/berita/category");
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita categories:", err);
+    throw err;
+  }
+};
+
+// Fetch a single berita category by ID
+export const getBeritaCategoryById = async (id) => {
+  try {
+    const response = await api.get(`/berita/category/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita category:", err);
+    throw err;
+  }
+};
+
+// Fetch all berita
+export const getAllBerita = async () => {
+  try {
+    const response = await api.get("/berita");
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita:", err);
+    throw err;
+  }
+};
+
+// Fetch berita preview
+export const getBeritaPreview = async () => {
+  try {
+    const response = await api.get("/berita/preview");
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita preview:", err);
+    throw err;
+  }
+};
+
+// Fetch a single berita by ID
+export const getBeritaById = async (id) => {
+  try {
+    const response = await api.get(`/berita/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita:", err);
+    throw err;
+  }
+};
+
+// Fetch berita by category
+export const getBeritaByCategory = async (categoryId) => {
+  try {
+    const response = await api.get(`/berita/category/${categoryId}/blog`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita by category:", err);
+    throw err;
+  }
+};
+
+// Fetch berita preview by category
+export const getBeritaPreviewByCategory = async (categoryId) => {
+  try {
+    const response = await api.get(`/berita/category/${categoryId}/blog/preview`);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to fetch berita preview by category:", err);
+    throw err;
+  }
+};
