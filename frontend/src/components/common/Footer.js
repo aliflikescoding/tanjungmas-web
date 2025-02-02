@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import CustomContainer from "../custom/CustomContainer";
 import FooterImageCommon from "../commonComponents/FooterImageCommon";
 import FooterCategory from "../commonComponents/FooterCategory";
