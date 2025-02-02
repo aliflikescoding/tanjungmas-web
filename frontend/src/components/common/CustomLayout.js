@@ -1,10 +1,10 @@
 import Header from "./Header";
 import Footer from "./Footer";
 
-const CustomLayout = ({ children }) => {
+const CustomLayout = ({ children, blackText }) => {
   return (
     <>
-      <Header />
+      <Header blackText={blackText} />
       {children}
       <Footer />
     </>

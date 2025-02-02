@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 
-const MobileNavLinks = () => {
+const MobileNavLinks = ({ blackTextHamburger = false }) => {
   const [open, setOpen] = useState(false);
   const [headerImages, setHeaderImages] = useState([]);
 
@@ -33,7 +33,12 @@ const MobileNavLinks = () => {
 
   return (
     <div className="block md:hidden">
-      <div className="text-2xl font-thin text-white" onClick={showDrawer}>
+      <div
+        className={`text-2xl font-thin ${
+          blackTextHamburger ? "text-black" : "text-white"
+        }`}
+        onClick={showDrawer}
+      >
         <GiHamburgerMenu />
       </div>
       <Drawer
@@ -60,22 +65,22 @@ const MobileNavLinks = () => {
         }
       >
         <div className="py-5 flex flex-col justify-center items-center text-2xl gap-3">
-          <Link className="py-1 font-medium" href="/">
+          <Link className="py-1 font-medium text-black" href="/">
             Beranda
           </Link>
-          <Link className="py-1 font-medium" href="/tentang">
+          <Link className="py-1 font-medium text-black" href="/tentang">
             Tentang
           </Link>
-          <Link className="py-1 font-medium" href="/layanan">
+          <Link className="py-1 font-medium text-black" href="/layanan">
             Layanan
           </Link>
-          <Link className="py-1 font-medium" href="/info">
+          <Link className="py-1 font-medium text-black" href="/info">
             Info
           </Link>
-          <Link className="py-1 font-medium" href="/berita">
+          <Link className="py-1 font-medium text-black" href="/berita">
             Berita
           </Link>
-          <Link className="py-1 font-medium" href="/kontak">
+          <Link className="py-1 font-medium text-black" href="/kontak">
             Kontak
           </Link>
         </div>
@@ -83,7 +88,7 @@ const MobileNavLinks = () => {
           {headerImages.map((image) => (
             <Image
               key={image.id}
-              src={`${image.image}`}
+              src={image.image}
               alt="navbar image"
               width="0"
               height="0"

@@ -6,7 +6,8 @@ import StickyWrapper from "../custom/StickyComponent.js";
 import HeaderImages from "../commonComponents/HeaderImages.js";
 import MobileNavLinks from "../commonComponents/MobileNavLinks.js";
 
-export default async function Header() {
+export default function Header({ blackText = false }) {
+  const textColor = blackText ? "text-black" : "text-white";
 
   return (
     <StickyWrapper>
@@ -27,62 +28,26 @@ export default async function Header() {
           <HeaderImages />
           <nav>
             <ul className="hidden md:flex gap-5">
-              <li className="group relative">
-                <Link
-                  href="/"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Beranda
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
-              <li className="group relative">
-                <Link
-                  href="/tentang"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Tentang
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
-              <li className="group relative">
-                <Link
-                  href="/layanan"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Layanan
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
-              <li className="group relative">
-                <Link
-                  href="/info"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Info
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
-              <li className="group relative">
-                <Link
-                  href="/berita"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Berita
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
-              <li className="group relative">
-                <Link
-                  href="/kontak"
-                  className="text-white transition ease-in-out duration-[5ms] group-hover:text-primary"
-                >
-                  Kontak
-                </Link>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </li>
+              {[
+                { href: "/", label: "Beranda" },
+                { href: "/tentang", label: "Tentang" },
+                { href: "/layanan", label: "Layanan" },
+                { href: "/info", label: "Info" },
+                { href: "/berita", label: "Berita" },
+                { href: "/kontak", label: "Kontak" },
+              ].map((item) => (
+                <li key={item.href} className="group relative">
+                  <Link
+                    href={item.href}
+                    className={`${textColor} transition ease-in-out duration-[5ms] group-hover:text-primary`}
+                  >
+                    {item.label}
+                  </Link>
+                  <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full"></span>
+                </li>
+              ))}
             </ul>
-            <MobileNavLinks />
+            <MobileNavLinks blackTextHamburger={blackText} />
           </nav>
         </CustomContainer>
       </div>
