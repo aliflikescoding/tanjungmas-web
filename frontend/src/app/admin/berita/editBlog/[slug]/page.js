@@ -10,18 +10,18 @@ import {
   DeleteOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
-import { updateInfoBlog } from "@/app/api/private";
-import { getInfoBlogBasedOnId } from "@/app/api/public";
+import { updateBeritaBlog } from "@/app/api/private";
+import { getBeritaById } from "@/app/api/public";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const { Dragger } = Upload;
 
-const EditInfoBlog = ({ params: paramsPromise }) => {
+const EditBeritaBlog = ({ params: paramsPromise }) => {
   const params = React.use(paramsPromise);
   const { slug } = params;
 
-  const [infoBlog, setInfoBlog] = useState(null);
+  const [berita, setBerita] = useState(null);
   const [form] = Form.useForm();
   const [content, setContent] = useState("");
   const [existingImages, setExistingImages] = useState([]);
@@ -32,18 +32,18 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchInfoBlog = async () => {
-      const response = await getInfoBlogBasedOnId(parseInt(slug));
-      setInfoBlog(response);
+    const fetchBerita = async () => {
+      const response = await getBeritaById(parseInt(slug));
+      console.log(response);
+      setBerita(response);
       form.setFieldsValue({
         title: response.title,
         sinopsis: response.sinopsis,
       });
-      setContent(response.infoBlogContent);
+      setContent(response.beritaContent);
       setExistingImages(response.images || []);
     };
-
-    fetchInfoBlog();
+    fetchBerita();
   }, [slug, form]);
 
   const handleImageUpload = (files) => {
@@ -52,7 +52,7 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
 
   const handleModalOk = () => {
     if (filesToUpload.length > 0) {
-      setNewImages([...newImages, ...filesToUpload]);
+      setNewImages((prev) => [...prev, ...filesToUpload]);
       setFilesToUpload([]);
       setIsModalOpen(false);
       message.success("Files added successfully!");
@@ -79,15 +79,15 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const hideLoadingMessage = message.loading({
-      content: "Updating info blog...",
+      content: "Updating berita blog...",
       duration: 0,
     });
 
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("infoBlogContent", content);
-    formData.append("categoryId", infoBlog.categoryId);
+    formData.append("beritaContent", content);
+    formData.append("categoryId", berita.categoryId);
 
     existingImages.forEach((image) => {
       formData.append("existingImageIds", image.id);
@@ -98,17 +98,17 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
     });
 
     try {
-      await updateInfoBlog(parseInt(slug), formData);
+      await updateBeritaBlog(parseInt(slug), formData);
       hideLoadingMessage();
       setIsLoading(false);
-      message.success("Info blog updated successfully!");
+      message.success("Berita blog updated successfully!");
       setTimeout(() => {
-        router.push(`/admin/info/category/${infoBlog.categoryId}`);
+        router.push(`/admin/berita/category/${berita.categoryId}`);
       }, 1000);
     } catch (err) {
       hideLoadingMessage();
       setIsLoading(false);
-      message.error("Failed to update info blog.");
+      message.error("Failed to update berita blog.");
     }
   };
 
@@ -127,14 +127,14 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/info/category/${infoBlog?.categoryId}`}
+        href={`/admin/berita/category/${berita?.categoryId}`}
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
-        <ArrowLeftOutlined className="text-2xl" />{" "}
+        <ArrowLeftOutlined className="text-2xl" />
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
-        Edit {infoBlog?.title}
+        Edit {berita?.title}
       </h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
@@ -182,11 +182,11 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
                   />
                 </div>
               ))}
-              {newImages.map((image, index) => (
+              {newImages.map((file, index) => (
                 <div key={index} className="inline-block mr-2 relative">
                   <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Preview ${index}`}
+                    src={URL.createObjectURL(file)}
+                    alt={`New ${index}`}
                     className="w-20 h-20 object-cover"
                   />
                   <Button
@@ -201,20 +201,17 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
             </div>
           </Form.Item>
           <Form.Item>
-            <div className="flex justify-center items-center">
-              <Button
-                size="large"
-                type="primary"
-                htmlType="submit"
-                loading={isLoading}
-              >
-                {isLoading ? "Loading" : "Submit"}
-              </Button>
-            </div>
+            <Button
+              size="large"
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+            >
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </div>
-
       <Modal
         title="Upload Images"
         open={isModalOpen}
@@ -228,13 +225,10 @@ const EditInfoBlog = ({ params: paramsPromise }) => {
           <p className="ant-upload-text">
             Click or drag files to this area to upload
           </p>
-          <p className="ant-upload-hint">
-            Support for multiple uploads. Drag or select multiple files.
-          </p>
         </Dragger>
       </Modal>
     </div>
   );
 };
 
-export default EditInfoBlog;
+export default EditBeritaBlog;

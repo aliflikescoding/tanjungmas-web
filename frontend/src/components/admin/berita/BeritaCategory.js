@@ -165,7 +165,7 @@ const BeritaCategory = () => {
           >
             Delete
           </Button>
-          <Link href={`/admin/tentang/berita-category/${record.id}`}>
+          <Link href={`/admin/berita/category/${record.id}`}>
             <Button type="default" size="medium">
               Go to Berita
             </Button>

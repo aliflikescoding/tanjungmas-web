@@ -484,7 +484,21 @@ export const getBeritaPreview = async () => {
 export const getBeritaById = async (id) => {
   try {
     const response = await api.get(`/berita/${id}`);
-    return response.data;
+
+    // Replace /public with http://localhost:5000 in images
+    const updatedImages = response.data.images.map((image) => {
+      return {
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      };
+    });
+
+    const updatedResponse = {
+      ...response.data,
+      images: updatedImages,
+    };
+
+    return updatedResponse;
   } catch (err) {
     console.error("Failed to fetch berita:", err);
     throw err;
@@ -495,7 +509,17 @@ export const getBeritaById = async (id) => {
 export const getBeritaByCategory = async (categoryId) => {
   try {
     const response = await api.get(`/berita/category/${categoryId}/blog`);
-    return response.data;
+
+    // Replace /public with http://localhost:5000 in images for each berita item
+    const updatedBerita = response.data.map((berita) => ({
+      ...berita,
+      images: berita.images.map((image) => ({
+        ...image,
+        img: image.img.replace(/^\/public/, "http://localhost:5000"),
+      })),
+    }));
+
+    return updatedBerita;
   } catch (err) {
     console.error("Failed to fetch berita by category:", err);
     throw err;

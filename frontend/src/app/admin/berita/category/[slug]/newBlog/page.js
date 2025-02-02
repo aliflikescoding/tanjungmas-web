@@ -5,8 +5,8 @@ import ReactQuill from "react-quill-new"; // Updated import
 import "react-quill-new/dist/quill.snow.css"; // Updated import
 import { Form, Input, Button, Upload, Modal, message } from "antd";
 import { UploadOutlined, InboxOutlined } from "@ant-design/icons";
-import { getInfoCategoryBasedOnId } from "@/app/api/public";
-import { createInfoBlog } from "@/app/api/private";
+import { getBeritaCategoryById } from "@/app/api/public"; // Updated import
+import { createBeritaBlog } from "@/app/api/private"; // Updated import
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -16,7 +16,7 @@ const { Dragger } = Upload;
 const Page = ({ params: paramsPromise }) => {
   // Unwrap params using React.use()
   const params = React.use(paramsPromise);
-  const { slug } = params; // Destructure slug from unwrapped params
+  const { slug } = params;
 
   const [name, setName] = useState("");
   const [form] = Form.useForm(); // Ant Design Form instance
@@ -28,9 +28,9 @@ const Page = ({ params: paramsPromise }) => {
   const router = useRouter(); // Use the useRouter hook at the top level
 
   useEffect(() => {
-    const fetchInfoName = async () => {
+    const fetchCategoryName = async () => {
       try {
-        const response = await getInfoCategoryBasedOnId(parseInt(slug));
+        const response = await getBeritaCategoryById(parseInt(slug)); // Updated API call
         if (response && response.title) {
           setName(response.title);
         } else {
@@ -43,7 +43,7 @@ const Page = ({ params: paramsPromise }) => {
       }
     };
 
-    fetchInfoName();
+    fetchCategoryName();
   }, [slug]);
 
   // Handle image upload via modal
@@ -73,30 +73,32 @@ const Page = ({ params: paramsPromise }) => {
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const hideLoadingMessage = message.loading({
-      content: "Uploading info blog...",
+      content: "Uploading berita blog...",
       duration: 0,
     });
+
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("sinopsis", values.sinopsis);
-    formData.append("infoBlogContent", content);
+    formData.append("beritaContent", content); // Updated field name to match API
     formData.append("categoryId", parseInt(slug)); // Ensure categoryId is a number
     images.forEach((image) => {
-      formData.append("images", image);
+      formData.append("images", image); // Append images to form data
     });
 
     try {
-      await createInfoBlog(formData); // Ensure the request is awaited
+      await createBeritaBlog(formData); // Updated API call
       hideLoadingMessage();
       setIsLoading(false);
-      message.success("Info blog added successfully!");
+      message.success("Berita blog added successfully!");
       setTimeout(() => {
-        router.push(`/admin/info/category/${slug}`); // Use the router instance
+        router.push(`/admin/berita/category/${slug}`); // Updated route
       }, 1000);
     } catch (err) {
       hideLoadingMessage(); // Hide loading message
       setIsLoading(false);
-      message.error("Failed to create info blog.");
+      message.error("Failed to create berita blog.");
+      console.error("Error while creating berita blog:", err);
     }
   };
 
@@ -116,14 +118,14 @@ const Page = ({ params: paramsPromise }) => {
   return (
     <div>
       <Link
-        href={`/admin/info/category/${slug}`}
+        href={`/admin/berita/category/${slug}`} // Updated route
         className="capitalize transition-all ease-in-out duration-150 flex gap-1 items-center font-medium mb-3 hover:text-blue-500"
       >
         <ArrowLeftOutlined className="text-2xl" />{" "}
         <p className="text-lg">Go Back</p>
       </Link>
       <h1 className="text-4xl font-medium mb-3 capitalize">
-        Create New Info Blog for {name}
+        Create New Berita Blog for {name}
       </h1>
       <div className="max-w-[1500px] mx-auto bg-white border-2 shadow-md px-4 py-6 rounded-md">
         <Form form={form} onFinish={handleSubmit} layout="vertical">
