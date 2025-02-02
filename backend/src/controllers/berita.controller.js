@@ -9,13 +9,31 @@ const unlinkAsync = util.promisify(fs.unlink);
 const getBeritaCategory = async (req, res) => {
   try {
     const response = await prisma.beritaCategory.findMany();
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "Error fetching berita category",
       error: error.message,
+    });
+  }
+};
+
+// Controller to get berita category by ID
+const getBeritaCategoryBasedOnID = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.beritaCategory.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Error fetching berita category",
+      error: err.message,
     });
   }
 };
@@ -28,7 +46,6 @@ const postBeritaCategory = async (req, res) => {
         title: req.body.title,
       },
     });
-
     res.status(200).json({
       message: "Berita category added successfully",
     });
@@ -44,7 +61,6 @@ const postBeritaCategory = async (req, res) => {
 // Controller to update berita category
 const updateBeritaCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.beritaCategory.update({
       where: {
@@ -54,7 +70,6 @@ const updateBeritaCategory = async (req, res) => {
         title: req.body.title,
       },
     });
-
     res.status(200).json({
       message: "Berita category updated successfully",
     });
@@ -70,14 +85,12 @@ const updateBeritaCategory = async (req, res) => {
 // Controller to delete berita category
 const deleteBeritaCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.beritaCategory.delete({
       where: {
         id: parseInt(id),
       },
     });
-
     res.status(200).json({
       message: "Berita category deleted successfully",
     });
@@ -98,7 +111,6 @@ const getBerita = async (req, res) => {
         images: true,
       },
     });
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -109,10 +121,9 @@ const getBerita = async (req, res) => {
   }
 };
 
-// Controller to get berita based on category
+// Controller to get berita by category
 const getBeritaByCategory = async (req, res) => {
   const { id } = req.params;
-
   try {
     const response = await prisma.berita.findMany({
       where: {
@@ -122,7 +133,6 @@ const getBeritaByCategory = async (req, res) => {
         images: true,
       },
     });
-
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
@@ -133,11 +143,76 @@ const getBeritaByCategory = async (req, res) => {
   }
 };
 
+// Controller to get berita preview
+const getBeritaPreview = async (req, res) => {
+  try {
+    const response = await prisma.berita.findMany({
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching berita preview",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to get berita by ID
+const getBeritaBasedOnId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.berita.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        images: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching berita",
+      error: error.message,
+    });
+  }
+};
+
+// Controller to get berita by category (preview)
+const getBeritaByCategoryPreview = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await prisma.berita.findMany({
+      where: {
+        categoryId: parseInt(id),
+      },
+      select: {
+        id: true,
+        title: true,
+        sinopsis: true,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching berita preview",
+      error: error.message,
+    });
+  }
+};
+
 // Controller to post berita
 const postBerita = async (req, res) => {
   try {
     const { title, sinopsis, beritaContent, categoryId } = req.body;
-
     const berita = await prisma.berita.create({
       data: {
         title,
@@ -152,7 +227,6 @@ const postBerita = async (req, res) => {
         img: `/public/beritaImages/${file.filename}`,
         beritaId: berita.id,
       }));
-
       await prisma.beritaImage.createMany({
         data: imageRecords,
       });
@@ -219,11 +293,9 @@ const putBerita = async (req, res) => {
 const deleteBerita = async (req, res) => {
   try {
     const { id } = req.params;
-
     await prisma.berita.delete({
       where: { id: parseInt(id) },
     });
-
     res.status(200).json({
       message: "Berita deleted successfully",
     });
@@ -238,11 +310,15 @@ const deleteBerita = async (req, res) => {
 
 module.exports = {
   getBeritaCategory,
+  getBeritaCategoryBasedOnID,
   postBeritaCategory,
   updateBeritaCategory,
   deleteBeritaCategory,
   getBerita,
   getBeritaByCategory,
+  getBeritaPreview,
+  getBeritaBasedOnId,
+  getBeritaByCategoryPreview,
   postBerita,
   putBerita,
   deleteBerita,
