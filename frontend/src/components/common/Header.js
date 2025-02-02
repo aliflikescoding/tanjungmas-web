@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import CustomContainer from "../custom/CustomContainer.js";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,10 +9,16 @@ import HeaderImages from "../commonComponents/HeaderImages.js";
 import MobileNavLinks from "../commonComponents/MobileNavLinks.js";
 
 export default function Header({ blackText = false }) {
-  const textColor = blackText ? "text-black" : "text-white";
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const textColor = isScrolled
+    ? "text-white"
+    : blackText
+    ? "text-black"
+    : "text-white";
 
   return (
-    <StickyWrapper>
+    <StickyWrapper onScrollChange={setIsScrolled}>
       <div className="py-3">
         <CustomContainer className="flex justify-between items-center">
           <div className="block">
@@ -47,7 +55,9 @@ export default function Header({ blackText = false }) {
                 </li>
               ))}
             </ul>
-            <MobileNavLinks blackTextHamburger={blackText} />
+            <MobileNavLinks
+              blackTextHamburger={isScrolled ? false : blackText}
+            />
           </nav>
         </CustomContainer>
       </div>
