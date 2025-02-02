@@ -30,10 +30,6 @@ const MobileNavLinks = () => {
   const onClose = () => {
     setOpen(false);
   };
-  
-  useEffect(() => {
-    console.log(headerImages);
-  }, [headerImages])
 
   return (
     <div className="block md:hidden">
