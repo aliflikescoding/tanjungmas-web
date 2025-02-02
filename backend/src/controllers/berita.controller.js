@@ -151,6 +151,7 @@ const getBeritaPreview = async (req, res) => {
         id: true,
         title: true,
         sinopsis: true,
+        images: true,
       },
     });
     res.status(200).json(response);
@@ -197,6 +198,7 @@ const getBeritaByCategoryPreview = async (req, res) => {
         id: true,
         title: true,
         sinopsis: true,
+        images: true,
       },
     });
     res.status(200).json(response);

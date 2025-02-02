@@ -482,6 +482,7 @@ const getFasilitasPreview = async (req, res) => {
         id: true,
         title: true,
         sinopsis: true,
+        fasilitasImages: true,
       },
     });
 
@@ -551,6 +552,7 @@ const getFasilitasByCategoryPreview = async (req, res) => {
         id: true,
         title: true,
         sinopsis: true,
+        fasilitasImages: true,
       },
     });
 
@@ -608,9 +610,7 @@ const postFasilitas = async (req, res) => {
 // controler to update fasilitas
 const putFasilitas = async (req, res) => {
   try {
-    const { id } = req.params; // Get the Fasilitas ID from the URL params
-    const { title, sinopsis, content, categoryId } = req.body;
-
+    const { id } = req.params;
     // Build the data object dynamically for partial updates
     const dataToUpdate = {};
     if (title) dataToUpdate.title = title;
