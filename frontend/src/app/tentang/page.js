@@ -1,10 +1,11 @@
 import CustomLayout from "@/components/common/CustomLayout";
+import TentangTanjungmas from "@/components/section/TentangTanjungmas";
 
 const Tentang = () => {
   return (
     <CustomLayout blackText={true}>
-      <div className="pt-[100px]">Tentang</div>
-      <div className="h-screen w-full bg-slate-100"></div>
+      <div className="pt-[100px]"></div>
+      <TentangTanjungmas />
     </CustomLayout>
   );
 };
