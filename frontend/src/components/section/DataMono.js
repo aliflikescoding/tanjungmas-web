@@ -22,7 +22,7 @@ const DataMono = () => {
   }, []);
 
   return (
-    <div className="pb-[15vh] sm:pb-[25vh]">
+    <div className="pb-20">
       <CustomContainer>
         <h2 className="title2">Data Monografi</h2>
         <h1 className="title1 mb-8">Kabupaten Tanjungmas</h1>
