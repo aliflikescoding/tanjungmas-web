@@ -10,7 +10,7 @@ import {
 import BlogCard from "@/components/ui/BlogCard.js";
 import Link from "next/link.js";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Select } from "antd";
+import { Tabs } from "antd";
 
 const Fasilitas = ({ limitedView = false }) => {
   const [featuredFasilitas, setFeaturedFasilitas] = useState([]);
@@ -68,28 +68,34 @@ const Fasilitas = ({ limitedView = false }) => {
     fetchFasilitasByCategory();
   }, [selectedCategory]);
 
-  const handleCategoryChange = (value) => {
-    setSelectedCategory(value);
+  const handleCategoryChange = (key) => {
+    setSelectedCategory(key === "all" ? null : key);
   };
 
-  console.log("limitedView:", limitedView); // Debugging
-  console.log("featuredFasilitas:", featuredFasilitas); // Debugging
+  const items = [
+    {
+      key: "all",
+      label: "All",
+    },
+    ...categories.map((category) => ({
+      key: category.id,
+      label: category.title,
+    })),
+  ];
 
   return (
     <div className="py-20">
       <CustomContainer>
         <h2 className="title2">Fasilitas</h2>
-        <h1 className="title1">Fasilitas Di Tanjungmas</h1>
+        <h1 className="title1">
+          {limitedView ? "Fasilitas Terkini" : "Semua Fasilitas"}
+        </h1>
         {!limitedView && (
           <div className="mt-4">
-            <Select
-              placeholder="Pilih Kategori"
-              style={{ width: 200, marginBottom: 20 }}
+            <Tabs
+              defaultActiveKey="all"
+              items={items}
               onChange={handleCategoryChange}
-              options={categories.map((category) => ({
-                label: category.title,
-                value: category.id,
-              }))}
             />
           </div>
         )}
@@ -101,20 +107,19 @@ const Fasilitas = ({ limitedView = false }) => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
             {(limitedView
-              ? featuredFasilitas.slice(0, 3) // Slice the array if limitedView is true
+              ? featuredFasilitas.slice(0, 3)
               : featuredFasilitas
-            ) // Otherwise, display all items
-              .map((fasilitas) => (
-                <BlogCard
-                  key={fasilitas.id}
-                  title={fasilitas.title}
-                  thumbnailSrc={
-                    fasilitas.fasilitasImages?.[0]?.img || "/default-image.jpg"
-                  }
-                  previewText={fasilitas.sinopsis}
-                  link={`/fasilitas/${fasilitas.id}`}
-                />
-              ))}
+            ).map((fasilitas) => (
+              <BlogCard
+                key={fasilitas.id}
+                title={fasilitas.title}
+                thumbnailSrc={
+                  fasilitas.fasilitasImages?.[0]?.img || "/default-image.jpg"
+                }
+                previewText={fasilitas.sinopsis}
+                link={`/fasilitas/${fasilitas.id}`}
+              />
+            ))}
           </div>
         )}
 

@@ -1,6 +1,7 @@
 import { Roboto } from "next/font/google";
 import "./global.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ConfigProvider } from "antd";
 import "@ant-design/v5-patch-for-react-19";
 
 const roboto = Roboto({
@@ -19,7 +20,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${roboto.className}`}>
-        <AntdRegistry>{children}</AntdRegistry>
+        <AntdRegistry>
+          <ConfigProvider
+            theme={{
+              components: {
+                Tabs: {
+                  colorPrimary: "#C42026",
+                  colorPrimaryHover: "#e6171f",
+                  colorPrimaryActive: "#e6171f",
+                },
+              },
+            }}
+          >
+            {children}
+          </ConfigProvider>
+        </AntdRegistry>
       </body>
     </html>
   );
