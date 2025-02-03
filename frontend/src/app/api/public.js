@@ -390,7 +390,6 @@ export const getInfoCategoryBasedOnId = async (id) => {
   }
 };
 
-// info blog
 // Get Info Blog by ID
 export const getInfoBlogBasedOnId = async (id) => {
   try {
@@ -419,7 +418,17 @@ export const getInfoBlogBasedOnId = async (id) => {
 export const getInfoBlogPreview = async () => {
   try {
     const response = await api.get("/info/blog/preview");
-    return response.data;
+
+    // Process the data to replace /public with localhost:5000/
+    const processedData = response.data.map((blog) => ({
+      ...blog,
+      images: blog.images.map((image) => ({
+        ...image,
+        img: image.img.replace("/public", "http://localhost:5000"),
+      })),
+    }));
+
+    return processedData;
   } catch (err) {
     throw new Error(err);
   }
