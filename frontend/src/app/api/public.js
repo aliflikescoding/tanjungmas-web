@@ -465,6 +465,15 @@ export const getInfoTextBasedOnId = async (id) => {
   }
 };
 
+export const getInfoTextBasedOnCategoryId = async (id) => {
+  try {
+    const response = await api.get(`/info/category/${id}/text`);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 // Get Info Text Preview by Category ID
 export const getInfoTextPreviewBasedOnCategoryId = async (id) => {
   try {

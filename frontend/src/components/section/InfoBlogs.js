@@ -33,7 +33,7 @@ const InfoBlogs = () => {
               title={berita.title}
               thumbnailSrc={berita.images?.[0]?.img || "/default-image.jpg"}
               previewText={berita.sinopsis}
-              link={`/berita/${berita.id}`}
+              link={`/info/${berita.id}`}
             />
           ))}
         </div>
