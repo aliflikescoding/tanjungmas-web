@@ -84,7 +84,7 @@ const Fasilitas = ({ limitedView = false }) => {
   ];
 
   return (
-    <div className="py-20">
+    <div className={limitedView ? "py-20" : "pb-20"}>
       <CustomContainer>
         <h2 className="title2">Fasilitas</h2>
         <h1 className="title1">

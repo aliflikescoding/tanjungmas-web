@@ -51,7 +51,7 @@ const SaranaPrasarana = () => {
   ];
 
   return (
-    <div className="py-[5vh] sm:py-[15vh]">
+    <div className="pb-[5vh] sm:pb-[15vh]">
       <CustomContainer>
         <div className="mb-3">
           <h2 className="title2">Pendukung</h2>

@@ -1,4 +1,5 @@
 import CustomLayout from "@/components/common/CustomLayout";
+import DataMono from "@/components/section/DataMono";
 import Fasilitas from "@/components/section/Fasilitas";
 import SaranaPrasarana from "@/components/section/SaranaPrasarana";
 import TentangTanjungmas from "@/components/section/TentangTanjungmas";
@@ -12,6 +13,7 @@ const Tentang = () => {
       <VisiMisi />
       <Fasilitas />
       <SaranaPrasarana />
+      <DataMono />
     </CustomLayout>
   );
 };
