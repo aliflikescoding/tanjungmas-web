@@ -29,13 +29,13 @@ export default function Header({ blackText = false }) {
                 width="0"
                 height="0"
                 sizes="100vw"
-                className="w-auto h-[53px] md:h-[63px]"
+                className="w-auto h-[53px] lg:h-[63px]"
               />
             </Link>
           </div>
           <HeaderImages />
           <nav>
-            <ul className="hidden md:flex gap-5">
+            <ul className="hidden lg:flex gap-5">
               {[
                 { href: "/", label: "Beranda" },
                 { href: "/tentang", label: "Tentang" },

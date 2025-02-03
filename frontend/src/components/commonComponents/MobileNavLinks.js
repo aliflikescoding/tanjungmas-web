@@ -32,7 +32,7 @@ const MobileNavLinks = ({ blackTextHamburger = false }) => {
   };
 
   return (
-    <div className="block md:hidden">
+    <div className="block lg:hidden">
       <div
         className={`text-2xl font-thin ${
           blackTextHamburger ? "text-black" : "text-white"
@@ -57,7 +57,7 @@ const MobileNavLinks = ({ blackTextHamburger = false }) => {
                   width="0"
                   height="0"
                   sizes="100vw"
-                  className="w-auto h-[53px] md:h-[63px]"
+                  className="w-auto h-[53px] lg:h-[63px]"
                 />
               </Link>
             </div>
