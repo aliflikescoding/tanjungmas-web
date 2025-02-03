@@ -11,3 +11,63 @@
 .title2 {
   @apply text-xl sm:text-3xl font-medium tracking-wider text-red-500 uppercase;
 }
+
+.blog {
+  @apply text-base sm:text-lg leading-relaxed text-gray-800;
+}
+
+.blog h1 {
+  @apply text-3xl sm:text-4xl font-bold mt-6 mb-4 text-gray-900;
+}
+
+.blog h2 {
+  @apply text-2xl font-semibold mt-5 mb-3 text-gray-900;
+}
+
+.blog h3 {
+  @apply text-xl font-semibold mt-4 mb-2 text-gray-800;
+}
+
+.blog p {
+  @apply mb-4 text-gray-700;
+}
+
+.blog a {
+  @apply text-blue-600 underline hover:text-blue-800;
+}
+
+.blog ul {
+  @apply list-disc pl-5 mb-4;
+}
+
+.blog ol {
+  @apply list-decimal pl-5 mb-4;
+}
+
+.blog li {
+  @apply mb-1;
+}
+
+.blog blockquote {
+  @apply border-l-4 border-gray-500 pl-4 italic text-gray-600 mb-4;
+}
+
+.blog strong {
+  @apply font-bold text-gray-900;
+}
+
+.blog em {
+  @apply italic text-gray-700;
+}
+
+.blog code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-red-600 font-mono text-sm;
+}
+
+.blog pre {
+  @apply bg-gray-100 p-4 rounded text-sm overflow-x-auto;
+}
+
+.blog img {
+  @apply max-w-full rounded-lg my-4;
+}
